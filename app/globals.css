@@ -1,0 +1,159 @@
+@import "tailwindcss";
+
+/*
+  Дизайн-система «Кварта».
+  Правила: без градиентов, без размытых теней, без скруглений больше 4px,
+  без иконок из паков. Разделение — линиями 1px и жёсткой тенью 2px без blur.
+*/
+
+@theme {
+  --color-paper: #f6f4ee; /* неотбеленная бумага */
+  --color-surface: #ede8df; /* песочная плашка */
+  --color-ink: #1c1917; /* кофейный графит */
+  /* ДОПУЩЕНИЕ: в промпте #78716C даёт контраст ~4.4:1 на фоне — ниже AA (4.5) для мелкого текста.
+     Чуть темнее, чтобы пройти проверку доступности. */
+  --color-muted: #6a635e;
+  --color-accent: #b84a28; /* обожжённая терракота */
+  --color-olive: #5f634f; /* сухой шалфей */
+  --color-line: #ddd7cd; /* волосяная линия */
+
+  --radius-sm: 2px;
+}
+
+@theme inline {
+  --font-display: var(--f-display), Georgia, "Times New Roman", serif;
+  --font-sans: var(--f-sans), system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: var(--f-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+
+@layer base {
+  *,
+  ::before,
+  ::after {
+    border-color: var(--color-line);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background: var(--color-accent);
+    color: var(--color-paper);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+
+  [id] {
+    scroll-margin-top: 1rem;
+  }
+}
+
+@layer components {
+  /* мелкая моно-подпись: «спецификация» */
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    min-height: 3.25rem;
+    padding: 0 1.5rem;
+    border: 1px solid var(--color-ink);
+    border-radius: 2px;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      background-color 0.15s,
+      color 0.15s,
+      border-color 0.15s;
+  }
+  .btn:active:not(:disabled) {
+    transform: translate(1px, 1px);
+  }
+  .btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .btn-solid {
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+  .btn-solid:hover:not(:disabled) {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+
+  .btn-line {
+    background: transparent;
+    color: var(--color-ink);
+  }
+  .btn-line:hover:not(:disabled) {
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+
+  /* поля формы: только нижняя линия, фокус — терракота */
+  .field {
+    display: block;
+    width: 100%;
+    margin-top: 0.25rem;
+    padding: 0.75rem 0;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid var(--color-ink);
+    border-radius: 0;
+    font: inherit;
+    font-size: 1.125rem; /* не меньше 16px, чтобы iOS не зумил при фокусе */
+    color: var(--color-ink);
+    appearance: none;
+    transition:
+      border-color 0.15s,
+      box-shadow 0.15s;
+  }
+  .field::placeholder {
+    color: var(--color-muted);
+  }
+  .field:focus {
+    outline: none;
+    border-bottom-color: var(--color-accent);
+    box-shadow: 0 1px 0 0 var(--color-accent);
+  }
+  .field[aria-invalid="true"] {
+    border-bottom-color: var(--color-accent);
+  }
+  textarea.field {
+    resize: vertical;
+    min-height: 5rem;
+  }
+}
