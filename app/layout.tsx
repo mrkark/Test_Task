@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Alegreya, JetBrains_Mono, Manrope } from "next/font/google";
+import AttributionCapture from "@/components/AttributionCapture";
 import "./globals.css";
 
 /*
@@ -40,7 +41,10 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ru" className={`${display.variable} ${sans.variable} ${mono.variable}`}>
-      <body>{children}</body>
+      <body>
+        <AttributionCapture />
+        {children}
+      </body>
     </html>
   );
 }
