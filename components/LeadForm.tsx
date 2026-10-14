@@ -181,7 +181,7 @@ export default function LeadForm() {
           placeholder="Как к вам обращаться"
         />
         {errors.name && (
-          <p id="err-name" role="alert" className="mt-2 text-sm text-accent">
+          <p id="err-name" role="alert" className="mt-2 text-sm text-accent-deep">
             {errors.name}
           </p>
         )}
@@ -208,7 +208,7 @@ export default function LeadForm() {
           placeholder="+375 (29) 123-45-67"
         />
         {errors.phone ? (
-          <p id="err-phone" role="alert" className="mt-2 text-sm text-accent">
+          <p id="err-phone" role="alert" className="mt-2 text-sm text-accent-deep">
             {errors.phone}
           </p>
         ) : (
@@ -241,7 +241,7 @@ export default function LeadForm() {
           ))}
         </div>
         {errors.interest && (
-          <p role="alert" className="mt-3 text-sm text-accent">
+          <p role="alert" className="mt-3 text-sm text-accent-deep">
             {errors.interest}
           </p>
         )}
