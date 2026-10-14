@@ -1,0 +1,41 @@
+"use client";
+
+import React, { useState } from "react";
+import { Header } from "@/components/Header";
+import { Hero } from "@/components/Hero";
+import { FreshnessCycle } from "@/components/FreshnessCycle";
+import { StorySection } from "@/components/StorySection";
+import { CatalogSection } from "@/components/CatalogSection";
+import { SubscriptionSection } from "@/components/SubscriptionSection";
+import { DeliverySection } from "@/components/DeliverySection";
+import { OrderSection } from "@/components/OrderSection";
+import { Footer } from "@/components/Footer";
+
+export default function Home() {
+  const [selectedInterest, setSelectedInterest] = useState<string>("subscription");
+
+  const scrollToOrder = (interestId: string) => {
+    setSelectedInterest(interestId);
+    const orderElement = document.getElementById("order");
+    if (orderElement) {
+      orderElement.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  return (
+    <main className="min-h-screen flex flex-col bg-craft-bg text-craft-dark">
+      <Header />
+      <Hero />
+      <FreshnessCycle />
+      <StorySection />
+      <CatalogSection onSelectItem={(id) => scrollToOrder(id)} />
+      <SubscriptionSection onSelectSubscription={() => scrollToOrder("subscription")} />
+      <DeliverySection />
+      <OrderSection
+        selectedInterest={selectedInterest}
+        onInterestChange={(id) => setSelectedInterest(id)}
+      />
+      <Footer />
+    </main>
+  );
+}
