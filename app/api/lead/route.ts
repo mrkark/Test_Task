@@ -2,7 +2,7 @@ import { after, NextResponse } from "next/server";
 import { INTEREST_LABELS } from "@/lib/catalog";
 import { leadSchema } from "@/lib/lead-schema";
 import { validatePhone } from "@/lib/phone";
-import { saveLead } from "@/lib/storage";
+import { saveLead, type SaveResult } from "@/lib/storage";
 import { notifyTelegram } from "@/lib/telegram";
 import type { Lead } from "@/lib/types";
 
@@ -62,10 +62,10 @@ export async function POST(req: Request) {
     comment: data.comment,
     attribution: Object.fromEntries(
       Object.entries(data.attribution ?? {}).filter(([, v]) => v),
-    ),
+    ) as Lead["attribution"],
   };
 
-  let result;
+  let result: SaveResult;
   try {
     result = await saveLead(lead);
   } catch (err) {

@@ -36,7 +36,7 @@ export default function Header() {
           ))}
         </nav>
 
-        <a href="#order" className="btn btn-line !min-h-11 !px-4 text-sm">
+        <a href="#order" className="btn btn-line min-h-11 px-4 text-sm">
           Заказать
         </a>
       </div>

@@ -21,10 +21,7 @@ export default function WeekStatusPlate() {
   ];
 
   return (
-    <div
-      className="border border-ink bg-surface p-5 shadow-[2px_2px_0_0_var(--color-ink)]"
-      aria-live="polite"
-    >
+    <div className="border border-ink bg-surface p-5 shadow-[2px_2px_0_0_var(--color-ink)]">
       <p className="eyebrow">Следующая партия</p>
       <dl className="mt-4 grid grid-cols-[auto_1fr] gap-x-6 gap-y-2 font-mono text-sm">
         {rows.map(([label, value]) => (
