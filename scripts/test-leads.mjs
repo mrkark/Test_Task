@@ -1,5 +1,5 @@
-import { normalizeBelarusPhone, isValidBelarusPhone } from "./lib/validations.ts";
-import { saveLead, isDuplicateSubmission } from "./lib/leads-store.ts";
+import { normalizeBelarusPhone, isValidBelarusPhone } from "../lib/validations.ts";
+import { saveLead, isDuplicateSubmission } from "../lib/leads-store.ts";
 
 async function runTests() {
   console.log("=== Testing Belarusian Phone Validation ===");
