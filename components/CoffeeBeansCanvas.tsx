@@ -151,7 +151,7 @@ export function CoffeeBeansCanvas() {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 pointer-events-none z-0 opacity-45 transition-opacity duration-1000"
+      className="fixed inset-0 pointer-events-none -z-10 opacity-40 dark:opacity-50 transition-opacity duration-700"
       aria-hidden="true"
     />
   );

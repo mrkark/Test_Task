@@ -18,23 +18,23 @@ export default function Home() {
 
   const scrollToOrder = (interestId: string) => {
     setSelectedInterest(interestId);
-    const orderElement = document.getElementById("order");
-    if (orderElement) {
-      orderElement.scrollIntoView({ behavior: "smooth" });
-    }
+    setTimeout(() => {
+      const orderElement = document.getElementById("order");
+      if (orderElement) {
+        orderElement.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 50);
   };
 
   return (
-    <main className="min-h-screen flex flex-col bg-bean-parchment text-bean-espresso relative selection:bg-bean-crack selection:text-bean-parchment">
-      {/* Floating Animated Coffee Beans Background Canvas */}
+    <main className="min-h-screen flex flex-col bg-bean-parchment dark:bg-bean-dark-bg text-bean-espresso dark:text-bean-dark-text relative selection:bg-bean-crack selection:text-bean-parchment transition-colors duration-300">
+      {/* Floating Animated Coffee Beans Background Canvas (strictly -z-10) */}
       <CoffeeBeansCanvas />
 
       {/* Landing Page Content */}
       <Header />
       <Hero />
-      <div id="roast-simulator">
-        <RoastingSimulator />
-      </div>
+      <RoastingSimulator />
       <FreshnessCycle />
       <StorySection />
       <CatalogSection onSelectItem={(id) => scrollToOrder(id)} />

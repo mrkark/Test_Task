@@ -102,20 +102,20 @@ export function RoastingSimulator() {
   const currentPhase = ROAST_PHASES[activePhaseIndex];
 
   return (
-    <section className="py-16 sm:py-24 border-b border-bean-border bg-bean-crema/40 relative overflow-hidden">
+    <section id="roast-simulator" className="py-16 sm:py-24 border-b border-bean-border dark:border-bean-dark-border bg-bean-crema/40 dark:bg-bean-dark-surface/40 relative z-10 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 pb-6 border-b border-bean-border">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 pb-6 border-b border-bean-border dark:border-bean-dark-border">
           <div>
-            <div className="font-mono text-xs text-bean-muted uppercase tracking-widest mb-2 flex items-center gap-2">
+            <div className="font-mono text-xs text-bean-muted dark:text-bean-dark-muted uppercase tracking-widest mb-2 flex items-center gap-2">
               <CoffeeBeanIcon size={16} roast="green" />
               <span>[01.1] Интерактивный процесс обжарки</span>
             </div>
-            <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl font-bold text-bean-espresso">
+            <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl font-bold text-bean-espresso dark:text-bean-dark-text">
               Анатомия 5-килограммового батча
             </h2>
           </div>
-          <p className="mt-4 md:mt-0 font-body text-bean-muted max-w-md text-sm sm:text-base leading-relaxed">
+          <p className="mt-4 md:mt-0 font-body text-bean-muted dark:text-bean-dark-muted max-w-md text-sm sm:text-base leading-relaxed">
             Покрутите температуру, чтобы увидеть, как сырое зеленое зерно
             трансформируется в барабане ростера на ул. Короля, 9.
           </p>
@@ -124,9 +124,9 @@ export function RoastingSimulator() {
         {/* Simulator Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           {/* Visual Interactive Bean Stage */}
-          <div className="lg:col-span-6 bg-bean-parchment border-2 border-bean-espresso p-8 sm:p-12 relative flex flex-col items-center justify-center min-h-[380px] shadow-craft">
+          <div className="lg:col-span-6 bg-bean-parchment dark:bg-bean-dark-card border-2 border-bean-espresso dark:border-bean-dark-border p-8 sm:p-12 relative flex flex-col items-center justify-center min-h-[380px] shadow-craft dark:shadow-craft-dark">
             {/* Live Temp Badge */}
-            <div className="absolute top-4 left-4 font-mono text-xs px-3 py-1 bg-bean-espresso text-bean-parchment font-bold tracking-wider">
+            <div className="absolute top-4 left-4 font-mono text-xs px-3 py-1 bg-bean-espresso dark:bg-bean-dark-bg text-bean-parchment dark:text-bean-dark-text font-bold tracking-wider border border-bean-border dark:border-bean-dark-border">
               ТЕМПЕРАТУРА: {currentPhase.temp}°C
             </div>
 
@@ -140,8 +140,8 @@ export function RoastingSimulator() {
             <div className="relative my-8 flex items-center justify-center">
               {/* Heat glow / smoke effect */}
               {currentPhase.smoke && (
-                <div className="absolute -top-10 w-24 h-16 opacity-60 animate-bounce pointer-events-none">
-                  <div className="text-center font-mono text-xs text-bean-crack font-bold tracking-widest">
+                <div className="absolute -top-10 w-24 h-16 opacity-75 animate-bounce pointer-events-none">
+                  <div className="text-center font-mono text-xs text-bean-crack dark:text-bean-dark-accent font-bold tracking-widest">
                     * КРЭК! *
                   </div>
                 </div>
@@ -196,9 +196,9 @@ export function RoastingSimulator() {
             </div>
 
             {/* Flavor descriptor pill */}
-            <div className="w-full mt-4 pt-4 border-t border-bean-border flex flex-col sm:flex-row justify-between items-center text-xs font-mono text-bean-muted gap-2">
+            <div className="w-full mt-4 pt-4 border-t border-bean-border dark:border-bean-dark-border flex flex-col sm:flex-row justify-between items-center text-xs font-mono text-bean-muted dark:text-bean-dark-muted gap-2">
               <span>ПРОФИЛЬ ВКУСА:</span>
-              <span className="font-bold text-bean-espresso">
+              <span className="font-bold text-bean-espresso dark:text-bean-dark-text">
                 {currentPhase.flavorProfile}
               </span>
             </div>
@@ -207,20 +207,20 @@ export function RoastingSimulator() {
           {/* Controls & Narrative */}
           <div className="lg:col-span-6 space-y-6">
             <div>
-              <div className="font-mono text-xs uppercase tracking-widest text-bean-crack font-bold mb-1">
+              <div className="font-mono text-xs uppercase tracking-widest text-bean-crack dark:text-bean-dark-accent font-bold mb-1">
                 ФАЗА {activePhaseIndex + 1} ИЗ {ROAST_PHASES.length} · {currentPhase.temp}°C
               </div>
-              <h3 className="font-heading text-2xl sm:text-3xl font-bold text-bean-espresso mb-3">
+              <h3 className="font-heading text-2xl sm:text-3xl font-bold text-bean-espresso dark:text-bean-dark-text mb-3">
                 {currentPhase.name}
               </h3>
-              <p className="font-body text-base sm:text-lg text-bean-muted leading-relaxed">
+              <p className="font-body text-base sm:text-lg text-bean-muted dark:text-bean-dark-muted leading-relaxed">
                 {currentPhase.fullDesc}
               </p>
             </div>
 
             {/* Clickable Phase Tabs */}
             <div className="space-y-2 pt-2">
-              <label className="block font-mono text-xs uppercase tracking-wider text-bean-muted mb-2 font-bold">
+              <label className="block font-mono text-xs uppercase tracking-wider text-bean-muted dark:text-bean-dark-muted mb-2 font-bold">
                 Выберите контрольную точку температуры:
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -231,10 +231,10 @@ export function RoastingSimulator() {
                       key={idx}
                       type="button"
                       onClick={() => setActivePhaseIndex(idx)}
-                      className={`text-left p-2.5 border transition-all text-xs font-mono ${
+                      className={`text-left p-2.5 border transition-all text-xs font-mono cursor-pointer ${
                         isActive
-                          ? "bg-bean-espresso text-bean-parchment border-bean-espresso font-bold shadow-craft-sm"
-                          : "bg-bean-parchment text-bean-espresso border-bean-border hover:border-bean-espresso"
+                          ? "bg-bean-espresso dark:bg-bean-dark-accent text-bean-parchment dark:text-bean-dark-bg border-bean-espresso dark:border-bean-dark-accent font-bold shadow-craft-sm dark:shadow-craft-sm-dark"
+                          : "bg-bean-parchment dark:bg-bean-dark-card text-bean-espresso dark:text-bean-dark-text border-bean-border dark:border-bean-dark-border hover:border-bean-espresso dark:hover:border-bean-dark-accent"
                       }`}
                     >
                       <div className="flex items-center justify-between">
@@ -252,7 +252,7 @@ export function RoastingSimulator() {
             </div>
 
             {/* Fact Box */}
-            <div className="p-4 bg-bean-parchment border-l-4 border-bean-crack border border-bean-border text-xs font-mono text-bean-espresso leading-relaxed">
+            <div className="p-4 bg-bean-parchment dark:bg-bean-dark-card border-l-4 border-bean-crack dark:border-bean-dark-accent border border-bean-border dark:border-bean-dark-border text-xs font-mono text-bean-espresso dark:text-bean-dark-text leading-relaxed">
               💡 <strong>Почему мы не используем темную обжарку «итальянского» типа?</strong>
               <br />
               При температуре выше 225°C природный сахар зерна сгорает в золу, оставляя лишь едкую горечь. Мы обжариваем так, чтобы в вашей чашке чувствовалась терруарная сладость ягоды, а не угли.

@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: "class",
   content: [
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -23,8 +24,17 @@ module.exports = {
           chaff: "#D9A865",     // Golden roasted silverskin / chaff
           caramel: "#8C4F2B",   // Maillard reaction warm brown
           honey: "#B57D3E",     // Honey process / golden bean
+
+          // Dark Theme Palette Tokens (Velvet Dark Roast)
+          "dark-bg": "#120A06",      // Deepest dark roast espresso
+          "dark-surface": "#1B100B", // Roaster drum dark surface
+          "dark-card": "#24160E",    // Dark bean card
+          "dark-border": "#3D2619",  // Deep coffee border
+          "dark-text": "#F5EBE1",    // Warm crema text
+          "dark-muted": "#A38F7F",   // Muted chaff text
+          "dark-accent": "#E06A3B",  // Glowing terracotta crack
         },
-        // Maintain backwards compatibility with craft tokens mapped to bean palette
+        // Backwards compatibility with craft tokens
         craft: {
           bg: "#F9F6F0",
           surface: "#F3ECE1",
@@ -47,12 +57,14 @@ module.exports = {
         none: "0",
         sm: "2px",
         DEFAULT: "4px",
-        bean: "12px 4px 14px 4px", // Organic coffee bean asymmetrical radius
+        bean: "12px 4px 14px 4px",
       },
       boxShadow: {
         craft: "2px 2px 0px 0px #1A0F0A",
+        "craft-dark": "2px 2px 0px 0px #F5EBE1",
         "craft-sm": "1px 1px 0px 0px #1A0F0A",
-        "bean-glow": "0 0 25px -5px rgba(196, 85, 37, 0.35)",
+        "craft-sm-dark": "1px 1px 0px 0px #F5EBE1",
+        "bean-glow": "0 0 25px -5px rgba(196, 85, 37, 0.45)",
       },
       letterSpacing: {
         editorial: "-0.03em",

@@ -1,15 +1,33 @@
+"use client";
+
 import React from "react";
 import { WORKSHOP_INFO } from "@/lib/data";
 import { CoffeeBeanIcon } from "./CoffeeBeanIcon";
 
 export function Footer() {
+  const scrollTo = (e: React.MouseEvent, targetId: string) => {
+    e.preventDefault();
+    if (targetId === "top") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+    const el = document.querySelector(targetId);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
-    <footer className="bg-bean-espresso text-bean-parchment pt-16 pb-12 border-t border-bean-espresso">
+    <footer className="bg-bean-espresso dark:bg-[#0B0604] text-bean-parchment pt-16 pb-12 border-t border-bean-espresso dark:border-stone-900 relative z-10 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 pb-12 border-b border-stone-800">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 pb-12 border-b border-stone-800 dark:border-stone-900">
           {/* Brand & Manifesto */}
           <div className="md:col-span-5">
-            <a href="#" className="inline-flex items-center gap-2 font-heading text-3xl font-bold tracking-tight text-bean-parchment mb-3 group">
+            <a
+              href="#"
+              onClick={(e) => scrollTo(e, "top")}
+              className="inline-flex items-center gap-2 font-heading text-3xl font-bold tracking-tight text-bean-parchment mb-3 group cursor-pointer"
+            >
               <CoffeeBeanIcon size={26} roast="crack" className="group-hover:rotate-12 transition-transform" />
               <span>КВАРТА</span>
             </a>
@@ -34,7 +52,7 @@ export function Footer() {
             <div>Сб–Вс: {WORKSHOP_INFO.schedule.weekends}</div>
             <div className="pt-2">
               Прямая связь:{" "}
-              <a href="https://t.me/kvarta_roastery" className="text-bean-parchment underline hover:text-bean-crack">
+              <a href="https://t.me/kvarta_roastery" target="_blank" rel="noopener noreferrer" className="text-bean-parchment underline hover:text-bean-crack transition-colors">
                 Telegram @kvarta_roastery
               </a>
             </div>
@@ -44,41 +62,62 @@ export function Footer() {
           <div className="md:col-span-3 font-mono text-xs flex flex-col justify-between">
             <div className="space-y-2 text-stone-400">
               <div>
-                <a href="#roast-simulator" className="hover:text-bean-parchment transition-colors text-bean-chaff">
+                <a
+                  href="#roast-simulator"
+                  onClick={(e) => scrollTo(e, "#roast-simulator")}
+                  className="hover:text-bean-parchment transition-colors text-bean-chaff"
+                >
                   → Анатомия обжарки зерна
                 </a>
               </div>
               <div>
-                <a href="#freshness" className="hover:text-bean-parchment transition-colors">
+                <a
+                  href="#freshness"
+                  onClick={(e) => scrollTo(e, "#freshness")}
+                  className="hover:text-bean-parchment transition-colors"
+                >
                   → Почему важна свежесть
                 </a>
               </div>
               <div>
-                <a href="#catalog" className="hover:text-bean-parchment transition-colors">
+                <a
+                  href="#catalog"
+                  onClick={(e) => scrollTo(e, "#catalog")}
+                  className="hover:text-bean-parchment transition-colors"
+                >
                   → Спешелти-зерно этой недели
                 </a>
               </div>
               <div>
-                <a href="#subscription" className="hover:text-bean-parchment transition-colors">
+                <a
+                  href="#subscription"
+                  onClick={(e) => scrollTo(e, "#subscription")}
+                  className="hover:text-bean-parchment transition-colors"
+                >
                   → Кофейная подписка на месяц
                 </a>
               </div>
               <div>
-                <a href="#delivery" className="hover:text-bean-parchment transition-colors">
+                <a
+                  href="#delivery"
+                  onClick={(e) => scrollTo(e, "#delivery")}
+                  className="hover:text-bean-parchment transition-colors"
+                >
                   → Доставка по пятницам
                 </a>
               </div>
             </div>
 
             <div className="pt-6">
-              <a
-                href="#"
-                className="inline-flex items-center gap-1.5 text-stone-300 hover:text-bean-parchment uppercase tracking-wider text-[11px]"
+              <button
+                type="button"
+                onClick={(e) => scrollTo(e, "top")}
+                className="inline-flex items-center gap-1.5 text-stone-300 hover:text-bean-parchment uppercase tracking-wider text-[11px] cursor-pointer"
               >
                 <CoffeeBeanIcon size={12} roast="light" />
                 <span>Наверх к началу</span>
                 <span>↑</span>
-              </a>
+              </button>
             </div>
           </div>
         </div>
