@@ -21,7 +21,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const viewport: Viewport = {
-  themeColor: "#F9F6F0",
+  themeColor: "#120A06",
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
@@ -77,7 +77,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ru" className={`${playfair.variable} ${manrope.variable} ${jetbrainsMono.variable}`}>
+    <html lang="ru" className={`dark ${playfair.variable} ${manrope.variable} ${jetbrainsMono.variable}`}>
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
         {/* LocalBusiness Structured Data (JSON-LD) for SEO */}
@@ -105,7 +105,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="bg-bean-parchment text-bean-espresso min-h-screen selection:bg-bean-crack selection:text-bean-parchment antialiased">
+      <body className="bg-bean-dark-bg text-bean-dark-text min-h-screen selection:bg-bean-crack selection:text-white antialiased">
         {children}
       </body>
     </html>

@@ -24,13 +24,9 @@ export function SubscriptionSection({ onSelectSubscription }: SubscriptionSectio
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-            {/* Left Column: Heading and explanation */}
+            {/* Left Column: ONLY BOLD HEADING */}
             <div className="lg:col-span-7">
-              <div className="font-mono text-xs text-bean-muted dark:text-bean-dark-muted uppercase tracking-widest mb-2 flex items-center gap-1.5">
-                <CoffeeBeanIcon size={14} roast="medium" />
-                <span>[05] Свежее зерно по расписанию</span>
-              </div>
-              <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-bean-espresso dark:text-bean-dark-text mb-4">
+              <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-[#F5EBE1] mb-4">
                 Кофейная подписка «Кварта»
               </h2>
               <p className="font-body text-base sm:text-lg text-bean-muted dark:text-bean-dark-muted mb-6 leading-relaxed">

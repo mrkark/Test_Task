@@ -152,21 +152,13 @@ export function OrderSection({ selectedInterest, onInterestChange }: OrderSectio
   };
 
   return (
-    <section id="order" className="py-16 sm:py-24 border-b border-bean-border dark:border-bean-dark-border bg-bean-parchment dark:bg-bean-dark-bg relative z-10 transition-colors">
+    <section id="order" className="py-16 sm:py-24 border-b border-[#3D2619] bg-[#120A06] relative z-10 transition-colors">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="border-2 border-bean-espresso dark:border-bean-dark-border bg-bean-crema dark:bg-bean-dark-surface p-6 sm:p-10 lg:p-12 shadow-craft dark:shadow-craft-dark">
-          <div className="font-mono text-xs text-bean-muted dark:text-bean-dark-muted uppercase tracking-widest mb-3 flex items-center gap-1.5">
-            <CoffeeBeanIcon size={14} roast="crack" />
-            <span>[07] Оформление свежей обжарки</span>
-          </div>
-          <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl font-bold text-bean-espresso dark:text-bean-dark-text mb-4">
+        <div className="border-2 border-[#3D2619] bg-[#1C110A] p-6 sm:p-10 lg:p-12 shadow-craft">
+          {/* Section Header: ONLY BOLD HEADING */}
+          <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl font-bold text-[#F5EBE1] mb-8 pb-4 border-b border-[#3D2619]">
             Заказ свежего зерна из четверговой партии
           </h2>
-          <p className="font-body text-sm sm:text-base text-bean-muted dark:text-bean-dark-muted mb-8 max-w-xl leading-relaxed">
-            Оставьте номер телефона. Наш обжарщик или менеджер свяжется с вами,
-            подтвердит помол, согласует удобный адрес доставки на пятницу или
-            подготовит самовывоз на ул. Короля, 9. Оплата при получении.
-          </p>
 
           {/* Feedback states */}
           {submitStatus === "success" && (

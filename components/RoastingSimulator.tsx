@@ -1,153 +1,273 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { CoffeeBeanIcon } from "./CoffeeBeanIcon";
 
 interface RoastPhase {
   temp: number;
+  timeInRoaster: string;
   name: string;
   shortDesc: string;
   fullDesc: string;
   color: string;
-  textColor: string;
   beanScale: number;
   crackOpen: boolean;
   smoke: boolean;
   flavorProfile: string;
+  chemistry: string;
+  colorName: string;
 }
 
 const ROAST_PHASES: RoastPhase[] = [
   {
     temp: 20,
-    name: "Зеленое зерно",
-    shortDesc: "Свежий урожай (влажность ~11%)",
+    timeInRoaster: "00:00",
+    name: "Сырое зеленое зерно",
+    shortDesc: "Свежий урожай арабики (влажность ~11%)",
     fullDesc:
-      "Зерно поступает в мастерскую в джутовых мешках. Оно твердое, серо-зеленое и пахнет свежескошенной травой и зеленым горошком.",
+      "Зерно поступает в мастерскую на ул. Короля, 9 в плотных джутовых мешках. Зёрна твердые, серо-зеленого оттенка, пахнут свежескошенной луговой травой, сырым горошком и свежестью горного терруара.",
     color: "#5B6C50",
-    textColor: "text-[#5B6C50]",
     beanScale: 1.0,
     crackOpen: false,
     smoke: false,
-    flavorProfile: "Трава, зеленый чай, плотная клетчатка",
+    flavorProfile: "Трава, зелёный чай, плотная сырая клетчатка",
+    chemistry: "Высокая влажность (11%), плотная кристаллическая структура",
+    colorName: "Оливково-зелёный (Green Arabica)",
   },
   {
     temp: 130,
-    name: "Сушка (Drying)",
-    shortDesc: "Выпаривание внутренней влаги",
+    timeInRoaster: "04:30",
+    name: "Фаза сушки (Drying)",
+    shortDesc: "Интенсивное выпаривание внутренней влаги",
     fullDesc:
-      "Барабан ростера нагревается. Зерно теряет влагу, желтеет и начинает пахнуть свежим сеном и теплыми злаками.",
+      "Барабан ростера вращается со скоростью 60 об/мин при непрерывном потоке горячего воздуха. Зерно постепенно теряет влагу, меняет цвет на соломенно-желтый и наполняет цех ароматом теплого сена, хлебного мякиша и злаков.",
     color: "#D9A865",
-    textColor: "text-[#B57D3E]",
     beanScale: 1.08,
     crackOpen: false,
     smoke: false,
-    flavorProfile: "Сушеные яблоки, солод, сено",
+    flavorProfile: "Печеное яблоко, светлый солод, подсушенное сено",
+    chemistry: "Влага падает до 5%, хлорофилл разрушается",
+    colorName: "Золотисто-жёлтый (Chaff & Straw)",
   },
   {
     temp: 165,
-    name: "Реакция Майяра",
-    shortDesc: "Карамелизация сахаров",
+    timeInRoaster: "08:15",
+    name: "Реакция Майяра и карамелизация",
+    shortDesc: "Рождение фирменного аромата обжарки",
     fullDesc:
-      "Сахара и аминокислоты внутри зерна вступают в реакцию. Зерно приобретает благородный коричный оттенок. Рождается аромат свежей выпечки.",
+      "Критический момент профиля: аминокислоты и сахара вступают в термохимическую реакцию. Зерно быстро коричневеет, приобретая оттенок корицы. Появляется сладкий аромат свежей сдобной выпечки и карамели.",
     color: "#B57D3E",
-    textColor: "text-[#B57D3E]",
     beanScale: 1.18,
     crackOpen: false,
     smoke: false,
-    flavorProfile: "Тосты, выпечка, тростниковый сахар",
+    flavorProfile: "Тосты, тростниковый сахар, карамельная корочка",
+    chemistry: "Синтез меланоидинов, зарождение 800+ ароматических соединений",
+    colorName: "Коричный / светлая карамель",
   },
   {
     temp: 196,
+    timeInRoaster: "10:50",
     name: "ПЕРВЫЙ КРЭК (First Crack)",
-    shortDesc: "Пик раскрытия! Зерно трескается",
+    shortDesc: "Кульминация! Зерно раскрывается со звонким щелчком",
     fullDesc:
-      "Кульминация обжарки! Внутреннее давление пара разрывает клеточную структуру зерна с громким щелчком («крэк»). Зерно увеличивается в 2 раза, раскрываются яркие цветочные и ягодные кислоты.",
+      "Внутреннее давление пара разрывает клеточные стенки зерна с отчетливым громким щелчком, похожим на попкорн. Зерно увеличивается почти в 2 раза, бороздка раскрывается, высвобождая тонкие ягодные и цветочные кислоты спешелти-арабики.",
     color: "#C45525",
-    textColor: "text-[#C45525]",
-    beanScale: 1.35,
+    beanScale: 1.34,
     crackOpen: true,
     smoke: true,
-    flavorProfile: "Жасмин, бергамот, спелое красное яблоко",
+    flavorProfile: "Жасмин, бергамот, спелая вишня, красное яблоко",
+    chemistry: "Экзотермический пик, расширение пор и высвобождение CO₂",
+    colorName: "Терракотовый румянец (First Crack)",
   },
   {
     temp: 208,
-    name: "Светлая обжарка (Drop!)",
-    shortDesc: "Выгрузка для фильтра (Эфиопия)",
+    timeInRoaster: "12:10",
+    name: "Светлая обжарка (Drop под фильтр)",
+    shortDesc: "Выгрузка батча для V60, Chemex и фильтр-кофеварки",
     fullDesc:
-      "Мы останавливаем обжарку и сбрасываем батч в охладитель. Весь цветочный букет и природная сладость Иргачеффе и Уилы запечатаны внутри.",
+      "Идеальный баланс для африканских и колумбийских сортов (Эфиопия Иргачеффе, Уила). Мы сбрасываем батч в охладительное сито, запечатывая природную ягодную сладость, сочную кислотность и тончайший аромат цветов.",
     color: "#8C4F2B",
-    textColor: "text-[#8C4F2B]",
     beanScale: 1.38,
     crackOpen: true,
     smoke: false,
-    flavorProfile: "Цветочный мед, цитрус, черный чай",
+    flavorProfile: "Цветочный мед, черная смородина, спелый персик",
+    chemistry: "Максимальное сохранение органических кислот и терруара",
+    colorName: "Теплый ореховый каштан",
   },
   {
     temp: 216,
-    name: "Эспрессо-профиль",
-    shortDesc: "Выгрузка под кофемашину и турку",
+    timeInRoaster: "13:30",
+    name: "Эспрессо-профиль (Drop под кофемашину)",
+    shortDesc: "Плотное тело и бархатная крема для рожковых машин и турки",
     fullDesc:
-      "Для Бразилии Серрадо мы доводим зерно до плотного шоколадного цвета. Кислотность уступает место бархатистой крема и нотам грецкого ореха.",
+      "Для плотных сортов вроде Бразилии Серрадо мы продолжаем обжарку еще 80 секунд. Кислотность смягчается, сахара карамелизуются до глубокого шоколадно-орехового профиля с густой кремовой пенкой и долгим послевкусием.",
     color: "#2C1A11",
-    textColor: "text-bean-espresso",
     beanScale: 1.42,
     crackOpen: true,
     smoke: false,
-    flavorProfile: "Темный шоколад, какао, грецкий орех",
+    flavorProfile: "Темный шоколад, жареный фундук, сливочная помадка",
+    chemistry: "Карамелизация сахарозы, выделение микро-капель кофейных масел",
+    colorName: "Глубокий шоколадный эспрессо",
   },
 ];
 
+const PHASE_DURATION_MS = 4200; // Duration per phase in milliseconds
+
 export function RoastingSimulator() {
-  const [activePhaseIndex, setActivePhaseIndex] = useState(3); // Start at First Crack!
+  const [activePhaseIndex, setActivePhaseIndex] = useState(0);
+  const [phaseProgress, setPhaseProgress] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const progressIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Auto-advance loop
+  useEffect(() => {
+    if (isPaused) {
+      if (timerRef.current) clearInterval(timerRef.current);
+      if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
+      return;
+    }
+
+    const intervalStep = 50;
+    const progressIncrement = (intervalStep / PHASE_DURATION_MS) * 100;
+
+    progressIntervalRef.current = setInterval(() => {
+      setPhaseProgress((prev) => {
+        if (prev >= 100) {
+          return 0;
+        }
+        return prev + progressIncrement;
+      });
+    }, intervalStep);
+
+    timerRef.current = setInterval(() => {
+      setActivePhaseIndex((prevIndex) => (prevIndex + 1) % ROAST_PHASES.length);
+      setPhaseProgress(0);
+    }, PHASE_DURATION_MS);
+
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+      if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
+    };
+  }, [isPaused]);
+
   const currentPhase = ROAST_PHASES[activePhaseIndex];
 
   return (
-    <section id="roast-simulator" className="py-16 sm:py-24 border-b border-bean-border dark:border-bean-dark-border bg-bean-crema/40 dark:bg-bean-dark-surface/40 relative z-10 transition-colors">
+    <section id="roast-simulator" className="py-16 sm:py-24 border-b border-[#3D2619] bg-[#170E09] relative z-10 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 pb-6 border-b border-bean-border dark:border-bean-dark-border">
-          <div>
-            <div className="font-mono text-xs text-bean-muted dark:text-bean-dark-muted uppercase tracking-widest mb-2 flex items-center gap-2">
-              <CoffeeBeanIcon size={16} roast="green" />
-              <span>[01.1] Интерактивный процесс обжарки</span>
-            </div>
-            <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl font-bold text-bean-espresso dark:text-bean-dark-text">
-              Анатомия 5-килограммового батча
-            </h2>
-          </div>
-          <p className="mt-4 md:mt-0 font-body text-bean-muted dark:text-bean-dark-muted max-w-md text-sm sm:text-base leading-relaxed">
-            Покрутите температуру, чтобы увидеть, как сырое зеленое зерно
-            трансформируется в барабане ростера на ул. Короля, 9.
-          </p>
+        {/* Section Header: ONLY BOLD HEADING */}
+        <div className="mb-10 sm:mb-14 pb-6 border-b border-[#3D2619]">
+          <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl font-bold text-[#F5EBE1]">
+            Анатомия 5-килограммового батча
+          </h2>
         </div>
 
-        {/* Simulator Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        {/* Live Auto-Animation Status Bar */}
+        <div className="mb-8 p-3.5 bg-[#1F130C] border border-[#3D2619] flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
+          <div className="flex items-center gap-2.5">
+            <span className="relative flex h-2.5 w-2.5">
+              <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${isPaused ? "bg-stone-500" : "bg-bean-crack"}`} />
+              <span className={`relative inline-flex rounded-full h-2.5 w-2.5 ${isPaused ? "bg-stone-500" : "bg-bean-crack"}`} />
+            </span>
+            <span className="font-bold text-[#F5EBE1] tracking-wider uppercase">
+              {isPaused ? "Анимация приостановлена" : "Идёт автоматический цикл обжарки 5 кг"}
+            </span>
+            <span className="text-[#3D2619] hidden sm:inline">•</span>
+            <span className="text-[#A38F7F] hidden sm:inline">
+              Стадия {activePhaseIndex + 1} из {ROAST_PHASES.length}
+            </span>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => setIsPaused(!isPaused)}
+              className="px-2.5 py-1 bg-[#2A1910] hover:bg-[#382216] border border-[#3D2619] text-[#F5EBE1] uppercase text-[11px] tracking-wider transition-colors cursor-pointer"
+            >
+              {isPaused ? "▶ Продолжить" : "⏸ Пауза"}
+            </button>
+            <span className="text-[#A38F7F] text-[11px]">
+              {currentPhase.timeInRoaster} / 14:00 мин
+            </span>
+          </div>
+        </div>
+
+        {/* Continuous Step Progress Track */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 mb-8">
+          {ROAST_PHASES.map((phase, idx) => {
+            const isCurrent = idx === activePhaseIndex;
+            const isCompleted = idx < activePhaseIndex;
+
+            return (
+              <div
+                key={idx}
+                className={`p-2.5 border transition-all text-left font-mono relative overflow-hidden ${
+                  isCurrent
+                    ? "bg-[#25150D] border-bean-crack text-[#F5EBE1] shadow-craft-sm"
+                    : isCompleted
+                    ? "bg-[#1C110A] border-[#3D2619] text-[#A38F7F]"
+                    : "bg-[#140C07] border-[#29170E] text-stone-600"
+                }`}
+              >
+                {/* Live linear progress bar for active stage */}
+                {isCurrent && !isPaused && (
+                  <div
+                    className="absolute bottom-0 left-0 h-1 bg-bean-crack transition-all duration-75"
+                    style={{ width: `${phaseProgress}%` }}
+                  />
+                )}
+
+                <div className="flex items-center justify-between mb-1">
+                  <span className={`text-[10px] font-bold ${isCurrent ? "text-bean-crack" : ""}`}>
+                    0{idx + 1}
+                  </span>
+                  <span
+                    className="w-2 h-2 rounded-full inline-block"
+                    style={{ backgroundColor: phase.color }}
+                  />
+                </div>
+                <div className="text-xs font-bold truncate">{phase.temp}°C</div>
+                <div className="text-[10px] truncate opacity-80">{phase.name}</div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Simulator Main Stage Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
           {/* Visual Interactive Bean Stage */}
-          <div className="lg:col-span-6 bg-bean-parchment dark:bg-bean-dark-card border-2 border-bean-espresso dark:border-bean-dark-border p-8 sm:p-12 relative flex flex-col items-center justify-center min-h-[380px] shadow-craft dark:shadow-craft-dark">
+          <div className="lg:col-span-6 bg-[#1C110A] border-2 border-[#3D2619] p-8 sm:p-12 relative flex flex-col items-center justify-center min-h-[420px] shadow-craft">
             {/* Live Temp Badge */}
-            <div className="absolute top-4 left-4 font-mono text-xs px-3 py-1 bg-bean-espresso dark:bg-bean-dark-bg text-bean-parchment dark:text-bean-dark-text font-bold tracking-wider border border-bean-border dark:border-bean-dark-border">
-              ТЕМПЕРАТУРА: {currentPhase.temp}°C
+            <div className="absolute top-4 left-4 font-mono text-xs px-3 py-1.5 bg-[#120A06] text-[#F5EBE1] font-bold tracking-wider border border-[#3D2619] flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-bean-crack animate-pulse" />
+              <span>ТЕМПЕРАТУРА: {currentPhase.temp}°C</span>
+            </div>
+
+            {/* Time in roaster badge */}
+            <div className="absolute top-4 right-4 font-mono text-xs px-3 py-1.5 bg-[#120A06] text-[#D9A865] font-bold tracking-wider border border-[#3D2619]">
+              ⏱ {currentPhase.timeInRoaster}
             </div>
 
             {currentPhase.crackOpen && (
-              <div className="absolute top-4 right-4 font-mono text-[11px] px-2.5 py-1 bg-bean-crack text-bean-parchment uppercase font-bold tracking-widest animate-pulse">
+              <div className="absolute top-14 right-4 font-mono text-[11px] px-2.5 py-1 bg-bean-crack text-white uppercase font-bold tracking-widest animate-pulse">
                 ⚡ FIRST CRACK!
               </div>
             )}
 
             {/* Morphing Animated SVG Bean */}
-            <div className="relative my-8 flex items-center justify-center">
+            <div className="relative my-10 flex items-center justify-center">
               {/* Heat glow / smoke effect */}
               {currentPhase.smoke && (
-                <div className="absolute -top-10 w-24 h-16 opacity-75 animate-bounce pointer-events-none">
-                  <div className="text-center font-mono text-xs text-bean-crack dark:text-bean-dark-accent font-bold tracking-widest">
+                <div className="absolute -top-12 w-28 h-16 opacity-90 animate-bounce pointer-events-none flex flex-col items-center">
+                  <div className="font-mono text-xs text-bean-crack font-bold tracking-widest bg-[#120A06]/80 px-2 py-0.5 border border-bean-crack">
                     * КРЭК! *
                   </div>
+                  <div className="text-[10px] font-mono text-[#D9A865]">щелчок зерна</div>
                 </div>
               )}
 
-              {/* Large Animated Bean */}
+              {/* Large Animated Morphing Bean */}
               <div
                 className="transition-all duration-700 ease-out"
                 style={{
@@ -155,107 +275,114 @@ export function RoastingSimulator() {
                 }}
               >
                 <svg
-                  width="180"
-                  height="180"
+                  width="200"
+                  height="200"
                   viewBox="0 0 100 100"
                   fill="none"
-                  className="filter drop-shadow-md"
+                  className="filter drop-shadow-xl"
                 >
-                  {/* Bean Shape with live fill color */}
+                  {/* Bean Body with live fill color */}
                   <path
                     d="M50 8C75 8 92 25 92 50C92 75 75 92 50 92C25 92 8 75 8 50C8 25 25 8 50 8Z"
                     fill={currentPhase.color}
                     className="transition-colors duration-700"
                   />
-                  {/* Center Crack / Creep */}
+
+                  {/* Center Crack / Crease */}
                   <path
                     d={
                       currentPhase.crackOpen
                         ? "M50 16C44 28 56 38 48 50C40 62 55 72 50 84"
                         : "M50 20C46 30 54 40 49 50C44 60 53 70 50 80"
                     }
-                    stroke="#F9F6F0"
+                    stroke="#F5EBE1"
                     strokeWidth={currentPhase.crackOpen ? "4.5" : "2.5"}
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     className="transition-all duration-500"
-                    opacity={currentPhase.crackOpen ? "0.95" : "0.7"}
+                    opacity={currentPhase.crackOpen ? "0.95" : "0.75"}
                   />
-                  {/* Subtle roasting oil sheen */}
+
+                  {/* Subtle roasting oil sheen for dark / espresso */}
                   {currentPhase.temp >= 208 && (
                     <circle
                       cx="65"
                       cy="35"
                       r="12"
                       fill="#FFFFFF"
-                      opacity="0.15"
+                      opacity="0.18"
                     />
                   )}
                 </svg>
               </div>
             </div>
 
-            {/* Flavor descriptor pill */}
-            <div className="w-full mt-4 pt-4 border-t border-bean-border dark:border-bean-dark-border flex flex-col sm:flex-row justify-between items-center text-xs font-mono text-bean-muted dark:text-bean-dark-muted gap-2">
-              <span>ПРОФИЛЬ ВКУСА:</span>
-              <span className="font-bold text-bean-espresso dark:text-bean-dark-text">
-                {currentPhase.flavorProfile}
+            {/* Live Color Swatch & Color Name */}
+            <div className="w-full mt-4 pt-4 border-t border-[#3D2619] flex flex-col sm:flex-row justify-between items-center text-xs font-mono text-[#A38F7F] gap-2">
+              <span className="flex items-center gap-2">
+                <span
+                  className="w-3 h-3 rounded-full inline-block border border-stone-500"
+                  style={{ backgroundColor: currentPhase.color }}
+                />
+                <span>ЦВЕТ ЗЕРНА:</span>
+              </span>
+              <span className="font-bold text-[#F5EBE1] text-right">
+                {currentPhase.colorName}
               </span>
             </div>
           </div>
 
-          {/* Controls & Narrative */}
-          <div className="lg:col-span-6 space-y-6">
-            <div>
-              <div className="font-mono text-xs uppercase tracking-widest text-bean-crack dark:text-bean-dark-accent font-bold mb-1">
-                ФАЗА {activePhaseIndex + 1} ИЗ {ROAST_PHASES.length} · {currentPhase.temp}°C
+          {/* Text Description of the Current Roasting Stage */}
+          <div className="lg:col-span-6 bg-[#1F130C] border-2 border-[#3D2619] p-6 sm:p-8 flex flex-col justify-between">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between border-b border-[#3D2619] pb-3">
+                <span className="font-mono text-xs uppercase tracking-widest text-bean-crack font-bold flex items-center gap-1.5">
+                  <CoffeeBeanIcon size={14} roast="crack" />
+                  <span>Стадия 0{activePhaseIndex + 1} · {currentPhase.temp}°C</span>
+                </span>
+                <span className="font-mono text-xs text-[#D9A865]">
+                  Партия 5 кг
+                </span>
               </div>
-              <h3 className="font-heading text-2xl sm:text-3xl font-bold text-bean-espresso dark:text-bean-dark-text mb-3">
+
+              <h3 className="font-heading text-2xl sm:text-3xl font-bold text-[#F5EBE1] leading-tight">
                 {currentPhase.name}
               </h3>
-              <p className="font-body text-base sm:text-lg text-bean-muted dark:text-bean-dark-muted leading-relaxed">
+
+              <div className="font-mono text-xs text-bean-crack font-medium bg-[#2A1810] px-3 py-1.5 border border-[#3D2619]">
+                {currentPhase.shortDesc}
+              </div>
+
+              <p className="font-body text-base text-[#D4C3B5] leading-relaxed pt-1">
                 {currentPhase.fullDesc}
               </p>
-            </div>
 
-            {/* Clickable Phase Tabs */}
-            <div className="space-y-2 pt-2">
-              <label className="block font-mono text-xs uppercase tracking-wider text-bean-muted dark:text-bean-dark-muted mb-2 font-bold">
-                Выберите контрольную точку температуры:
-              </label>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                {ROAST_PHASES.map((phase, idx) => {
-                  const isActive = idx === activePhaseIndex;
-                  return (
-                    <button
-                      key={idx}
-                      type="button"
-                      onClick={() => setActivePhaseIndex(idx)}
-                      className={`text-left p-2.5 border transition-all text-xs font-mono cursor-pointer ${
-                        isActive
-                          ? "bg-bean-espresso dark:bg-bean-dark-accent text-bean-parchment dark:text-bean-dark-bg border-bean-espresso dark:border-bean-dark-accent font-bold shadow-craft-sm dark:shadow-craft-sm-dark"
-                          : "bg-bean-parchment dark:bg-bean-dark-card text-bean-espresso dark:text-bean-dark-text border-bean-border dark:border-bean-dark-border hover:border-bean-espresso dark:hover:border-bean-dark-accent"
-                      }`}
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="font-bold">{phase.temp}°C</span>
-                        <span
-                          className="w-2.5 h-2.5 rounded-full inline-block"
-                          style={{ backgroundColor: phase.color }}
-                        />
-                      </div>
-                      <div className="truncate mt-1 opacity-90">{phase.name}</div>
-                    </button>
-                  );
-                })}
+              {/* Chemical Transformation & Flavor Profile Details */}
+              <div className="space-y-2.5 pt-3 border-t border-[#3D2619] text-xs font-mono">
+                <div className="bg-[#170E09] p-3 border border-[#3D2619]">
+                  <div className="text-[#A38F7F] uppercase text-[10px] tracking-wider mb-1">
+                    🔬 Процессы внутри клетки зерна:
+                  </div>
+                  <div className="text-[#F5EBE1] font-medium">
+                    {currentPhase.chemistry}
+                  </div>
+                </div>
+
+                <div className="bg-[#170E09] p-3 border border-[#3D2619]">
+                  <div className="text-[#D9A865] uppercase text-[10px] tracking-wider mb-1">
+                    ☕ Вкусовой профиль на этой стадии:
+                  </div>
+                  <div className="text-[#F5EBE1] font-medium">
+                    {currentPhase.flavorProfile}
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* Fact Box */}
-            <div className="p-4 bg-bean-parchment dark:bg-bean-dark-card border-l-4 border-bean-crack dark:border-bean-dark-accent border border-bean-border dark:border-bean-dark-border text-xs font-mono text-bean-espresso dark:text-bean-dark-text leading-relaxed">
-              💡 <strong>Почему мы не используем темную обжарку «итальянского» типа?</strong>
-              <br />
-              При температуре выше 225°C природный сахар зерна сгорает в золу, оставляя лишь едкую горечь. Мы обжариваем так, чтобы в вашей чашке чувствовалась терруарная сладость ягоды, а не угли.
+            {/* Bottom Educational Callout */}
+            <div className="mt-6 pt-4 border-t border-[#3D2619] text-xs font-mono text-[#A38F7F] flex items-center gap-2">
+              <CoffeeBeanIcon size={14} roast="light" />
+              <span>Зерно обжаривается в четверг и доставляется вам на 1–3 день свежести.</span>
             </div>
           </div>
         </div>

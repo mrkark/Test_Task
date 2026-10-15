@@ -55,13 +55,9 @@ export function StorySection() {
             </div>
           </div>
 
-          {/* Story Narrative */}
+          {/* Story Narrative: ONLY BOLD HEADING */}
           <div className="lg:col-span-7">
-            <div className="font-mono text-xs text-bean-muted dark:text-bean-dark-muted uppercase tracking-widest mb-3 flex items-center gap-1.5">
-              <CoffeeBeanIcon size={14} roast="crack" />
-              <span>[03] Кто обжаривает ваше зерно</span>
-            </div>
-            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-bean-espresso dark:text-bean-dark-text mb-6 leading-tight">
+            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-[#F5EBE1] mb-6 leading-tight">
               «Мы не строим кофейную фабрику. Мы слышим хлопок каждого зерна».
             </h2>
 

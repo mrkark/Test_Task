@@ -6,19 +6,11 @@ export function DeliverySection() {
   return (
     <section id="delivery" className="py-16 sm:py-24 border-b border-bean-border dark:border-bean-dark-border bg-bean-parchment dark:bg-bean-dark-bg relative z-10 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 pb-6 border-b border-bean-border dark:border-bean-dark-border">
-          <div>
-            <div className="font-mono text-xs text-bean-muted dark:text-bean-dark-muted uppercase tracking-widest mb-2 flex items-center gap-1.5">
-              <CoffeeBeanIcon size={14} roast="dark" />
-              <span>[06] Доставка свежего зерна</span>
-            </div>
-            <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl font-bold text-bean-espresso dark:text-bean-dark-text">
-              Доставка по Минску и самовывоз
-            </h2>
-          </div>
-          <p className="mt-4 md:mt-0 font-body text-bean-muted dark:text-bean-dark-muted max-w-md text-sm sm:text-base">
-            Зерно обжаривается в четверг и попадает к вам в пятницу — в идеальной фазе дегазации.
-          </p>
+        {/* Section Header: ONLY BOLD HEADING */}
+        <div className="mb-12 pb-6 border-b border-[#3D2619]">
+          <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl font-bold text-[#F5EBE1]">
+            Доставка по Минску и самовывоз
+          </h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

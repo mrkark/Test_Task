@@ -61,20 +61,11 @@ export function FreshnessCycle() {
   return (
     <section id="freshness" className="py-16 sm:py-24 border-b border-bean-border dark:border-bean-dark-border bg-bean-parchment dark:bg-bean-dark-bg relative z-10 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 sm:mb-16 pb-6 border-b border-bean-border dark:border-bean-dark-border">
-          <div>
-            <div className="font-mono text-xs text-bean-muted dark:text-bean-dark-muted uppercase tracking-widest mb-2 flex items-center gap-1.5">
-              <CoffeeBeanIcon size={14} roast="light" />
-              <span>[02] Дегазация и свежесть зерна</span>
-            </div>
-            <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl font-bold text-bean-espresso dark:text-bean-dark-text">
-              Почему именно 1–3 день после печи?
-            </h2>
-          </div>
-          <p className="mt-4 md:mt-0 font-body text-bean-muted dark:text-bean-dark-muted max-w-md text-sm sm:text-base">
-            В момент обжарки внутри структуры зерна запечатываются сотни ароматических соединений. Они начинают выдыхаться уже на 20-й день.
-          </p>
+        {/* Section Header: ONLY BOLD HEADING */}
+        <div className="mb-12 sm:mb-16 pb-6 border-b border-[#3D2619]">
+          <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl font-bold text-[#F5EBE1]">
+            Почему именно 1–3 день после печи?
+          </h2>
         </div>
 
         {/* Weekly Timeline Visualizer */}
