@@ -1,36 +1,40 @@
 import React from "react";
 import { WORKSHOP_INFO } from "@/lib/data";
+import { CoffeeBeanIcon } from "./CoffeeBeanIcon";
 
 export function Footer() {
   return (
-    <footer className="bg-craft-dark text-craft-bg pt-16 pb-12 border-t border-craft-dark">
+    <footer className="bg-bean-espresso text-bean-parchment pt-16 pb-12 border-t border-bean-espresso">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 pb-12 border-b border-craft-dark/40 border-stone-800">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 pb-12 border-b border-stone-800">
           {/* Brand & Manifesto */}
           <div className="md:col-span-5">
-            <a href="#" className="inline-block font-heading text-3xl font-bold tracking-tight text-craft-bg mb-3">
-              КВАРТА
+            <a href="#" className="inline-flex items-center gap-2 font-heading text-3xl font-bold tracking-tight text-bean-parchment mb-3 group">
+              <CoffeeBeanIcon size={26} roast="crack" className="group-hover:rotate-12 transition-transform" />
+              <span>КВАРТА</span>
             </a>
-            <p className="font-body text-sm text-craft-sand max-w-sm leading-relaxed mb-6">
+            <p className="font-body text-sm text-stone-300 max-w-sm leading-relaxed mb-6">
               Маленькая независимая обжарка в центре Минска. Жарим батчами по 5 кг
-              по четвергам, доставляем по пятницам. Честный кофе для дома и офиса.
+              по четвергам, доставляем по пятницам. Честное спешелти-зерно без складского хранения.
             </p>
-            <div className="font-mono text-xs text-stone-400">
-              © {new Date().getFullYear()} Обжарка «Кварта». Все права защищены.
+            <div className="font-mono text-xs text-stone-400 flex items-center gap-2">
+              <CoffeeBeanIcon size={12} roast="light" />
+              <span>© {new Date().getFullYear()} Обжарка «Кварта». Минск, ул. Короля, 9.</span>
             </div>
           </div>
 
           {/* Location & Contacts */}
           <div className="md:col-span-4 font-mono text-xs space-y-3 text-stone-300">
-            <div className="text-craft-accent font-bold uppercase tracking-wider mb-2">
-              Мастерская и самовывоз:
+            <div className="text-bean-crack font-bold uppercase tracking-wider mb-2 flex items-center gap-1.5">
+              <CoffeeBeanIcon size={12} roast="crack" />
+              <span>Мастерская и самовывоз:</span>
             </div>
             <div>г. Минск, ул. Короля, 9</div>
             <div>Пн–Пт: {WORKSHOP_INFO.schedule.weekdays}</div>
             <div>Сб–Вс: {WORKSHOP_INFO.schedule.weekends}</div>
             <div className="pt-2">
               Прямая связь:{" "}
-              <a href="https://t.me/kvarta_roastery" className="text-craft-bg underline hover:text-craft-accent">
+              <a href="https://t.me/kvarta_roastery" className="text-bean-parchment underline hover:text-bean-crack">
                 Telegram @kvarta_roastery
               </a>
             </div>
@@ -40,23 +44,28 @@ export function Footer() {
           <div className="md:col-span-3 font-mono text-xs flex flex-col justify-between">
             <div className="space-y-2 text-stone-400">
               <div>
-                <a href="#freshness" className="hover:text-craft-bg transition-colors">
-                  → Почему свежесть
+                <a href="#roast-simulator" className="hover:text-bean-parchment transition-colors text-bean-chaff">
+                  → Анатомия обжарки зерна
                 </a>
               </div>
               <div>
-                <a href="#catalog" className="hover:text-craft-bg transition-colors">
-                  → Ассортимент зерна
+                <a href="#freshness" className="hover:text-bean-parchment transition-colors">
+                  → Почему важна свежесть
                 </a>
               </div>
               <div>
-                <a href="#subscription" className="hover:text-craft-bg transition-colors">
-                  → Кофейная подписка
+                <a href="#catalog" className="hover:text-bean-parchment transition-colors">
+                  → Спешелти-зерно этой недели
                 </a>
               </div>
               <div>
-                <a href="#delivery" className="hover:text-craft-bg transition-colors">
-                  → Условия доставки
+                <a href="#subscription" className="hover:text-bean-parchment transition-colors">
+                  → Кофейная подписка на месяц
+                </a>
+              </div>
+              <div>
+                <a href="#delivery" className="hover:text-bean-parchment transition-colors">
+                  → Доставка по пятницам
                 </a>
               </div>
             </div>
@@ -64,9 +73,10 @@ export function Footer() {
             <div className="pt-6">
               <a
                 href="#"
-                className="inline-flex items-center gap-1 text-craft-sand hover:text-craft-bg uppercase tracking-wider text-[11px]"
+                className="inline-flex items-center gap-1.5 text-stone-300 hover:text-bean-parchment uppercase tracking-wider text-[11px]"
               >
-                <span>Наверх</span>
+                <CoffeeBeanIcon size={12} roast="light" />
+                <span>Наверх к началу</span>
                 <span>↑</span>
               </a>
             </div>
@@ -79,7 +89,7 @@ export function Footer() {
             ИП Ковальчук А. С. · Зарегистрирован Мингорисполкомом · УНП 193290000
           </div>
           <div>
-            Сайт не использует cookie для отслеживания личных данных.
+            Ремесленная кофейная обжарка · ул. Короля, 9, Минск, Беларусь
           </div>
         </div>
       </div>
