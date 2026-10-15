@@ -17,8 +17,8 @@
 
 @theme {
   --color-leaf: #3d4c26; /* зелёное зерно, поле героя */
-  --color-straw: #d6c583; /* сушка: зерно желтеет */
-  --color-cinnamon: #c9a06a; /* светлая обжарка */
+  --color-straw: #e9dfb4; /* сушка: зерно желтеет (светлый тон: на нём набран длинный текст) */
+  --color-cinnamon: #e2c79f; /* светлая обжарка (светлый тон: на нём набран каталог) */
   --color-city: #6b3f25; /* средняя обжарка */
   --color-roast: #2a1810; /* тёмная обжарка */
   --color-char: #1a0e08; /* самое тёмное: низ страницы */
@@ -28,7 +28,7 @@
   --color-stamp: #8e241c; /* штемпельная краска, для текста только на светлых полях */
   --color-flag: #e0604f; /* ошибки на тёмном */
   --color-ink: #241309; /* текст на светлых полях */
-  --color-ink-soft: #3a2616;
+  --color-ink-soft: #2e1c10;
 
   --radius-sm: 2px;
 }
@@ -80,7 +80,7 @@
 @layer components {
   /* Зерно бумаги/мешковины: плитка 180px из SVG-шума. Тёмные крапинки — для светлых полей. */
   .grain {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .11 0 0 0 0 .07 0 0 0 0 .04 0 0 0 .16 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .11 0 0 0 0 .07 0 0 0 0 .04 0 0 0 .08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     background-size: 180px 180px;
   }
   /* Светлые крапинки — для тёмных полей. */

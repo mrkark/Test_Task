@@ -1,5 +1,6 @@
 import { PRODUCTS } from "@/lib/catalog";
 import Bean from "./Bean";
+import BeanRating from "./BeanRating";
 import OrderLink from "./OrderLink";
 
 /*
@@ -12,7 +13,7 @@ export default function Menu() {
       <div className="mx-auto max-w-[1240px] px-5 py-16 md:py-24">
         <div className="grid gap-6 md:grid-cols-12 md:gap-x-12">
           <h2 className="h-stamp text-[clamp(2.2rem,5vw,4rem)] md:col-span-5">Что мы жарим сейчас</h2>
-          <p className="max-w-[40ch] text-lg md:col-span-6 md:col-start-7 md:self-end">
+          <p className="max-w-[40ch] text-xl md:col-span-6 md:col-start-7 md:self-end">
             Пачки по 250 г. Нажмите «Заказать», и форма внизу заполнится сама.
           </p>
         </div>
@@ -32,14 +33,15 @@ export default function Menu() {
 
               <div className="md:col-span-4">
                 <h3 className="h-stamp text-[clamp(1.9rem,3.6vw,2.8rem)]">{p.name}</h3>
-                <p className="mt-2 text-lg italic">{p.notes}</p>
+                <p className="mt-2 text-xl font-medium italic">{p.notes}</p>
+                <BeanRating value={p.rating} className="mt-4" />
               </div>
 
-              <dl className="stamp grid grid-cols-[auto_1fr] content-start gap-x-4 gap-y-1 px-4 py-3 text-[0.95rem] md:col-span-3">
+              <dl className="stamp grid grid-cols-[auto_1fr] content-start gap-x-4 gap-y-1 px-4 py-3 text-base md:col-span-3">
                 {p.specs.map(([label, value]) => (
                   <div key={label} className="contents">
-                    <dt className="text-ink-soft">{label}</dt>
-                    <dd className="font-medium">{value}</dd>
+                    <dt>{label}</dt>
+                    <dd className="font-semibold">{value}</dd>
                   </div>
                 ))}
               </dl>

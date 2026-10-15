@@ -12,7 +12,7 @@ export default function Story() {
         </h2>
 
         <div className="md:col-span-7">
-          <div className="grid gap-6 text-[1.0625rem] md:grid-cols-2 md:gap-x-10">
+          <div className="grid gap-6 text-[1.1875rem] leading-[1.7] md:grid-cols-2 md:gap-x-10">
             <p>
               Мы — Аня и Дмитрий, и мы оба работали бариста. Варили кофе, разговаривали с людьми у
               стойки и всё чаще ловили себя на мысли: хорошее зерно можно испортить просто тем, что
@@ -38,7 +38,7 @@ export default function Story() {
             <p className="font-display text-[clamp(1.7rem,3.8vw,2.8rem)] font-semibold uppercase leading-[1.05] tracking-[0.01em] text-balance">
               Мы не жарим про запас. Кофе должен жить, а не лежать на полках.
             </p>
-            <footer className="mt-4 text-base text-ink-soft">Аня и Дмитрий</footer>
+            <footer className="mt-4 text-lg font-medium text-ink">Аня и Дмитрий</footer>
           </blockquote>
         </div>
       </div>
