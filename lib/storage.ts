@@ -20,13 +20,13 @@ export type SaveResult = "created" | "duplicate";
 const LEADS_KEY = "kvarta:leads";
 const dedupKey = (phone: string) => `kvarta:dedup:${phone}`;
 
-function redisConfig(): { url: string; token: string } | null {
+export function redisConfig(): { url: string; token: string } | null {
   const url = process.env.UPSTASH_REDIS_REST_URL ?? process.env.KV_REST_API_URL;
   const token = process.env.UPSTASH_REDIS_REST_TOKEN ?? process.env.KV_REST_API_TOKEN;
   return url && token ? { url, token } : null;
 }
 
-async function redis<T = unknown>(
+export async function redis<T = unknown>(
   cfg: { url: string; token: string },
   command: (string | number)[],
 ): Promise<T> {
@@ -63,7 +63,7 @@ async function saveToRedis(cfg: { url: string; token: string }, lead: Lead): Pro
 /** телефон → время последней заявки (мс). Живёт в памяти инстанса и закрывает двойной клик. */
 const recent = new Map<string, number>();
 
-function leadsFile(): string {
+export function leadsFile(): string {
   if (process.env.LEADS_FILE) return process.env.LEADS_FILE;
   const dir = process.env.VERCEL ? os.tmpdir() : path.join(process.cwd(), ".data");
   return path.join(dir, "leads.jsonl");
@@ -117,4 +117,26 @@ export async function saveLead(lead: Lead): Promise<SaveResult> {
     );
   }
   return saveToFile(lead);
+}
+
+/**
+ * Все заявки, новые первыми. Нужны боту для статистики. Из Redis берём не больше 5000 последних,
+ * этого хватает на годы работы микро-обжарочной, а ответ остаётся небольшим.
+ */
+export async function listLeads(): Promise<Lead[]> {
+  const cfg = redisConfig();
+  const lines: string[] = cfg
+    ? await redis<string[]>(cfg, ["LRANGE", LEADS_KEY, 0, 4999])
+    : (await fs.readFile(leadsFile(), "utf8").catch(() => "")).split("\n").reverse();
+
+  const out: Lead[] = [];
+  for (const line of lines) {
+    if (!line) continue;
+    try {
+      out.push(JSON.parse(line) as Lead);
+    } catch {
+      /* битую строку пропускаем */
+    }
+  }
+  return out;
 }

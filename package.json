@@ -7,6 +7,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "bot:setup": "node --env-file=.env.local scripts/telegram-setup.mjs",
+    "bot:poll": "node --env-file=.env.local --import ./tests/register.mjs scripts/telegram-poll.mjs",
     "typecheck": "tsc --noEmit",
     "test": "node --import ./tests/register.mjs --test tests/*.test.ts"
   },

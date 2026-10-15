@@ -1,3 +1,7 @@
+import { activeRecipients } from "./bot";
+import { allowedChats } from "./bot-config";
+import { heading } from "./bot-text";
+import { getChat } from "./bot-store";
 import { formatPhone, nationalDigits } from "./phone";
 import type { Lead } from "./types";
 
@@ -19,7 +23,7 @@ export function formatLead(lead: Lead): string {
     value ? `${label}: ${escapeHtml(value)}` : null;
 
   const lines = [
-    "<b>Новая заявка · Кварта</b>",
+    heading("Новая заявка"),
     "",
     row("Имя", lead.name),
     `Телефон: ${escapeHtml(formatPhone(nationalDigits(lead.phone)))}`,
@@ -39,33 +43,34 @@ export function formatLead(lead: Lead): string {
 }
 
 /**
- * Дублирует заявку в Telegram. Без TELEGRAM_BOT_TOKEN и TELEGRAM_CHAT_ID тихо пропускает.
+ * Шлёт заявку в чаты команды, у которых уведомления не на паузе (/stop в боте).
+ * Без TELEGRAM_BOT_TOKEN и TELEGRAM_CHAT_ID тихо пропускает.
  * Никогда не бросает исключений: заявка уже сохранена, сбой уведомления не должен её ломать.
  */
 export async function notifyTelegram(lead: Lead): Promise<void> {
   const token = process.env.TELEGRAM_BOT_TOKEN;
-  const chatId = process.env.TELEGRAM_CHAT_ID;
-  if (!token || !chatId) {
+  const chats = [...allowedChats()];
+  if (!token || chats.length === 0) {
     console.info("[telegram] пропущено: не заданы TELEGRAM_BOT_TOKEN и TELEGRAM_CHAT_ID");
     return;
   }
 
-  try {
-    const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        chat_id: chatId,
-        text: formatLead(lead),
-        parse_mode: "HTML",
-        disable_web_page_preview: true,
-      }),
-      signal: AbortSignal.timeout(5000),
-    });
-    if (!res.ok) {
-      console.error("[telegram] ответ", res.status, (await res.text()).slice(0, 200));
-    }
-  } catch (err) {
-    console.error("[telegram] не удалось отправить", err instanceof Error ? err.message : err);
-  }
+  const recipients = await activeRecipients(chats, getChat);
+  const text = formatLead(lead);
+
+  await Promise.all(
+    recipients.map(async (chatId) => {
+      try {
+        const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ chat_id: chatId, text, parse_mode: "HTML", disable_web_page_preview: true }),
+          signal: AbortSignal.timeout(5000),
+        });
+        if (!res.ok) console.error("[telegram] ответ", res.status, (await res.text()).slice(0, 200));
+      } catch (err) {
+        console.error("[telegram] не удалось отправить", err instanceof Error ? err.message : err);
+      }
+    }),
+  );
 }
