@@ -6,36 +6,66 @@
 
 ---
 
-## ☕ О проекте и эксперименте: Claude Code vs Google Antigravity
+## 🌿 Структура репозитория (3 ветки)
 
-В рамках выполнения тестового задания была поставлена задача не просто написать типовой лендинг, а создать живой, тактильный продукт с характером независимой студии, полностью соблюдая строгие **Negative Constraints** (никаких сине-фиолетовых градиентов, полупрозрачного glassmorphism, скруглений больше 2px и типовых ИИ-паттернов).
+В соответствии с требованиями чистоты репозитория, в проекте представлены **ровно 3 ветки**:
 
-Основная разработка проекта велась с использованием **Claude Code**. Однако **ради профессионального интереса и эксперимента был также задействован Google Antigravity** — чтобы исследовать, как две разные передовые AI-системы справятся с абсолютно одинаковыми исходными промптами, единой дизайн-концепцией кофейного зерна и жесткими требованиями к бизнес-логике (валидация белорусских телефонов, дедупликация 10 минут, сквозная аналитика UTM, Telegram-оповещения).
-
-Обе реализации оформлены в отдельных изолированных ветках репозитория:
-
-| Ветка | Инструмент разработки | Основные акценты реализации |
-| :--- | :--- | :--- |
-| **[`kvarta_claude`](https://github.com/mrkark/Test_Task/tree/kvarta_claude)** | **Claude Code** *(Основная)* | Дизайн стадий обжарки (Roast Stages), барабан обжарки на CSS `@property`, Serverless Upstash Redis по REST, полнофункциональный Telegram-бот со статистикой заказов (`/stats`, Минский часовой пояс), 56 unit-тестов. |
-| **[`kvarta_antigravity`](https://github.com/mrkark/Test_Task/tree/kvarta_antigravity)** | **Google Antigravity** *(Эксперимент)* | Единая тёмная эстетика кофейного зерна, интерактивный симулятор «Первого крэка» (SVG-анимация фаз обжарки от 20°C до 196°C), селектор помола в форме заказа, парящие зёрна на Canvas, строгая валидация операторов РБ. |
+1. **[`main`](https://github.com/mrkark/Test_Task/tree/main)** — главная ветка с общей документацией, сравнительным анализом двух реализаций, результатами аудитов Lighthouse и скриншотами.
+2. **[`kvarta_claude`](https://github.com/mrkark/Test_Task/tree/kvarta_claude)** — реализация проекта, разработанная с помощью **Claude Code**.
+3. **[`kvarta_antigravity`](https://github.com/mrkark/Test_Task/tree/kvarta_antigravity)** — реализация проекта, разработанная с помощью **Google Antigravity**.
 
 ---
 
-## 📸 Сравнение интерфейсов
+## ☕ Эксперимент: Claude Code vs Google Antigravity
 
-### 1. Версия Claude Code (`kvarta_claude`)
-*Дизайн пошагово «прожаривается» по мере скролла: от зелёного зерна в Hero через солому и корицу к тёмной обжарке в блоке доставки.*
+В рамках выполнения задания основная разработка велась с помощью **Claude Code**. 
 
-| Десктопная версия (Hero с анимированным барабаном) | Мобильная адаптивность (Mobile-First) |
+**Google Antigravity был задействован ради профессионального интереса и эксперимента:** было любопытно сравнить, как две разные передовые AI-системы справятся с абсолютно одинаковыми промптами, единой дизайн-концепцией кофейного зерна и жесткими требованиями к бизнес-логике (*Negative Constraints: запрет типового ИИ-глянца, градиентов, glassmorphism; строгая валидация белорусских номеров; дедупликация 10 минут; сквозная UTM-аналитика; оповещения в Telegram*).
+
+---
+
+## 📊 Результаты аудита Google Lighthouse (Mobile Production)
+
+Оба проекта были собраны в продакшн-режиме (`npm run build && npm run start`) и протестированы через официальный CLI Google Lighthouse с мобильным профилем (эмуляция Moto G Power, троттлинг сети и CPU):
+
+| Метрика | Claude Code (`kvarta_claude`) | Google Antigravity (`kvarta_antigravity`) | Оценка и статус |
+| :--- | :---: | :---: | :--- |
+| **Accessibility (Доступность)** | **100 / 100** | **96 / 100** | 🟢 Зелёная зона (высокий контраст, семантика, ARIA) |
+| **Best Practices (Лучшие практики)** | **100 / 100** | **96 / 100** | 🟢 Зелёная зона (современные стандарты безопасности) |
+| **SEO (Поисковая оптимизация)** | **100 / 100** | **100 / 100** | 🟢 Идеально (OpenGraph, robots.txt, sitemap, JSON-LD) |
+| **Performance (Производительность)**| **88 / 100** *(93+ на Vercel)* | **88 / 100** | 🟢 Высокая скорость (быстрый FCP, минимальный TBT) |
+
+### Детальные замеры Core Web Vitals:
+
+| Показатель | `kvarta_claude` | `kvarta_antigravity` | Значение метрики |
+| :--- | :---: | :---: | :--- |
+| **First Contentful Paint (FCP)** | 2.6 с | **1.2 с** | Быстрый старт отображения контента (у Antigravity оценка 0.99) |
+| **Largest Contentful Paint (LCP)** | **3.2 с** | 3.4 с | Быстрая загрузка главного контентного блока |
+| **Total Blocking Time (TBT)** | **130 мс** | 150 мс | Отличная реакция на действия пользователя |
+| **Cumulative Layout Shift (CLS)** | 0.013 | **0.000** | Полное отсутствие паразитных сдвигов верстки |
+| **Speed Index** | **2.9 с** | 4.0 с | Быстрое визуальное заполнение страницы |
+
+---
+
+## 📱 Скриншоты интерфейсов (Особое внимание мобильным версиям)
+
+Мобильным версиям уделено ключевое внимание: сняты как экраны первого впечатления (Above the Fold), так и **полноразмерные длинные скриншоты мобильных лендингов на всю высоту страницы (Full Scroll)**, исключающие обрезку каталога, симулятора обжарки, ритма недели и форм заявки.
+
+### 1. Мобильные версии (Mobile-First — полный обзор страниц)
+
+| Версия Claude Code (`kvarta_claude`) | Версия Google Antigravity (`kvarta_antigravity`) |
 | :---: | :---: |
-| ![Claude Desktop](./screenshots/claude-desktop.png) | ![Claude Mobile](./screenshots/claude-mobile.png) |
+| **Первый экран (Above the Fold):**<br>![Claude Mobile View](./screenshots/claude-mobile-view.png) | **Первый экран (Above the Fold):**<br>![Antigravity Mobile View](./screenshots/antigravity-mobile-view.png) |
+| **Вся страница целиком (Full Scroll 390×4200):**<br>![Claude Mobile Full](./screenshots/claude-mobile-full.png) | **Вся страница целиком (Full Scroll 390×5200):**<br>![Antigravity Mobile Full](./screenshots/antigravity-mobile-full.png) |
 
-### 2. Версия Google Antigravity (`kvarta_antigravity`)
-*Атмосфера ремесленного ростерного цеха: палитра тёмной обжарки «Бархатный эспрессо», непрерывная визуализация стадий обжарки зерна и подбор помола.*
+---
 
-| Десктопная версия (Hero и симулятор обжарки) | Мобильная адаптивность (Mobile-First) |
+### 2. Десктопные версии (Desktop Views)
+
+| Версия Claude Code (`kvarta_claude`) | Версия Google Antigravity (`kvarta_antigravity`) |
 | :---: | :---: |
-| ![Antigravity Desktop](./screenshots/antigravity-desktop.png) | ![Antigravity Mobile](./screenshots/antigravity-mobile.png) |
+| **Главный экран (Hero с барабаном обжарки):**<br>![Claude Desktop Hero](./screenshots/claude-desktop-hero.png) | **Главный экран (Hero и симулятор обжарки):**<br>![Antigravity Desktop Hero](./screenshots/antigravity-desktop-hero.png) |
+| **Вся десктопная страница (Full Page 1440×3800):**<br>![Claude Desktop Full](./screenshots/claude-desktop-full.png) | **Вся десктопная страница (Full Page 1440×4400):**<br>![Antigravity Desktop Full](./screenshots/antigravity-desktop-full.png) |
 
 ---
 
@@ -53,7 +83,7 @@
 | **Telegram-интеграция** | Фоновый `after()` + полноценный бот (`/start`, `/stop`, `/restart`, `/stats`) | Прямая отправка лида в Telegram-чат менеджера через Bot API |
 | **Валидация телефонов** | Парсинг и нормализация E.164, строгая проверка кодов 25/29/33/44/17 | Zod-схема с проверкой национальных кодов операторов Беларуси |
 | **Тестовое покрытие** | **56 unit-тестов** (хранилище, дубли, телефон, схема, бот, статистика) | **8 тестов** валидатора телефонов + тест 10-минутной дедупликации |
-| **Lighthouse Mobile** | **Performance 93+, Accessibility 100, SEO 100** | Оптимизированный SSR-рендер, легковесный Canvas |
+| **Lighthouse Mobile** | **Accessibility 100, Best Practices 100, SEO 100, Perf 88** | **SEO 100, Accessibility 96, Best Practices 96, Perf 88** |
 
 ---
 
@@ -135,10 +165,14 @@ npm run start
 Test_Task/
 ├── kvarta-brief.pdf               # Исходный бриф тестового задания
 ├── screenshots/                   # Скриншоты десктопной и мобильной версий обоих проектов
-│   ├── claude-desktop.png
-│   ├── claude-mobile.png
-│   ├── antigravity-desktop.png
-│   └── antigravity-mobile.png
+│   ├── claude-desktop-hero.png
+│   ├── claude-desktop-full.png
+│   ├── claude-mobile-view.png
+│   ├── claude-mobile-full.png
+│   ├── antigravity-desktop-hero.png
+│   ├── antigravity-desktop-full.png
+│   ├── antigravity-mobile-view.png
+│   └── antigravity-mobile-full.png
 └── README.md                      # Главная документация и сравнительный обзор
 ```
 
