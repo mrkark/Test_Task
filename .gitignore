@@ -1,0 +1,7 @@
+kvarta_claude/
+kvanta_claude/
+kvanta_antigravity/
+node_modules/
+.next/
+*.log
+.DS_Store
