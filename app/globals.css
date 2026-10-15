@@ -5,25 +5,25 @@
 :root {
   --font-heading: 'Fraunces', serif;
   --font-body: 'Manrope', sans-serif;
-  --font-mono: 'Space Mono', monospace;
+  --font-mono: 'JetBrains Mono', monospace;
 }
 
 ::selection {
-  background-color: #B84A28;
-  color: #F6F4EE;
+  background-color: #C45525;
+  color: #F9F6F0;
 }
 
 html {
   scroll-behavior: smooth;
-  background-color: #F6F4EE;
-  color: #1C1917;
+  background-color: #F9F6F0;
+  color: #1A0F0A;
 }
 
 body {
   position: relative;
   min-height: 100vh;
-  background-color: #F6F4EE;
-  color: #1C1917;
+  background-color: #F9F6F0;
+  color: #1A0F0A;
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -39,32 +39,37 @@ body::before {
   height: 100vh;
   pointer-events: none;
   z-index: 9999;
-  opacity: 0.032;
+  opacity: 0.028;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
 
-/* Hairline utility */
+/* Hairline utilities matching the warm parchment tone */
 .border-hairline {
   border-width: 1px;
-  border-color: #DDD7CD;
+  border-color: #D6C7B2;
 }
 
 .border-hairline-t {
   border-top-width: 1px;
-  border-color: #DDD7CD;
+  border-color: #D6C7B2;
 }
 
 .border-hairline-b {
   border-bottom-width: 1px;
-  border-color: #DDD7CD;
+  border-color: #D6C7B2;
 }
 
 .border-hairline-r {
   border-right-width: 1px;
-  border-color: #DDD7CD;
+  border-color: #D6C7B2;
 }
 
 .border-hairline-l {
   border-left-width: 1px;
-  border-color: #DDD7CD;
+  border-color: #D6C7B2;
+}
+
+/* Custom Bean shape utility */
+.bean-shape {
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
 }

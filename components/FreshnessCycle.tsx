@@ -1,4 +1,5 @@
 import React from "react";
+import { CoffeeBeanIcon } from "./CoffeeBeanIcon";
 
 export function FreshnessCycle() {
   const weekDays = [
@@ -7,73 +8,80 @@ export function FreshnessCycle() {
       title: "Сбор зерна",
       desc: "Отбор мешков зелёного зерна свежего урожая",
       highlight: false,
+      roast: "green" as const,
     },
     {
       day: "ВТ",
       title: "Калибровка",
-      desc: "Тестовые каппинги и проверка влажности зерна",
+      desc: "Тестовые каппинги и замер плотности зерна",
       highlight: false,
+      roast: "drying" as const,
     },
     {
       day: "СР",
       title: "Стоп заказов",
-      desc: "Формируем партии на обжарочную смену недели",
+      desc: "Формируем 5-кг партии на обжарочную смену",
       highlight: false,
+      roast: "light" as const,
     },
     {
       day: "ЧТ",
       title: "ДЕНЬ ОБЖАРКИ",
       desc: "Жарим батчами по 5 кг на Короля, 9 с 08:00 до 20:00",
       highlight: true,
-      tag: "Печь работает",
-      color: "bg-craft-accent text-craft-bg",
+      tag: "Ростер в работе",
+      color: "bg-bean-crack text-bean-parchment",
+      roast: "crack" as const,
     },
     {
       day: "ПТ",
       title: "ДЕНЬ ДОСТАВКИ",
-      desc: "Курьер развозит свежие пачки прямо к вашей двери",
+      desc: "Курьер развозит зерно прямо к вашей двери (1-й день!)",
       highlight: true,
-      tag: "Доставка Минск",
-      color: "bg-craft-dark text-craft-bg",
+      tag: "Минск курьер",
+      color: "bg-bean-espresso text-bean-parchment",
+      roast: "dark" as const,
     },
     {
       day: "СБ",
       title: "Самовывоз",
       desc: "Мастерская открыта 10:00–18:00 для гостей и кофе",
       highlight: false,
+      roast: "medium" as const,
     },
     {
       day: "ВС",
       title: "Дегустации",
-      desc: "Каппинг новых экспериментальных лотов",
+      desc: "Каппинг экспериментальных микро-лотов",
       highlight: false,
+      roast: "green" as const,
     },
   ];
 
   return (
-    <section id="freshness" className="py-16 sm:py-24 border-b border-craft-border bg-craft-bg">
+    <section id="freshness" className="py-16 sm:py-24 border-b border-bean-border bg-bean-parchment">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 sm:mb-16 pb-6 border-b border-craft-border">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 sm:mb-16 pb-6 border-b border-bean-border">
           <div>
-            <div className="font-mono text-xs text-craft-muted uppercase tracking-widest mb-2">
-              [01] Философия продукта
+            <div className="font-mono text-xs text-bean-muted uppercase tracking-widest mb-2 flex items-center gap-1.5">
+              <CoffeeBeanIcon size={14} roast="light" />
+              <span>[02] Дегазация и свежесть зерна</span>
             </div>
-            <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl font-bold text-craft-dark">
-              Почему именно 1–3 дня после обжарки?
+            <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl font-bold text-bean-espresso">
+              Почему именно 1–3 день после печи?
             </h2>
           </div>
-          <p className="mt-4 md:mt-0 font-body text-craft-muted max-w-md text-sm sm:text-base">
-            Кофе — это скоропортящийся гастрономический продукт. Масла и эфирные
-            соединения испаряются через 3–4 недели.
+          <p className="mt-4 md:mt-0 font-body text-bean-muted max-w-md text-sm sm:text-base">
+            В момент обжарки внутри структуры зерна запечатываются сотни ароматических соединений. Они начинают выдыхаться уже на 20-й день.
           </p>
         </div>
 
         {/* Weekly Timeline Visualizer */}
         <div className="mb-16">
-          <div className="font-mono text-xs uppercase tracking-wider text-craft-muted mb-4 flex items-center gap-2">
-            <span>Ритм недели мастерской «Кварта»</span>
-            <span className="h-[1px] flex-1 bg-craft-border" />
+          <div className="font-mono text-xs uppercase tracking-wider text-bean-muted mb-4 flex items-center gap-2">
+            <span>Цикл обжарки недели в «Кварте»</span>
+            <span className="h-[1px] flex-1 bg-bean-border" />
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-3">
@@ -82,28 +90,24 @@ export function FreshnessCycle() {
                 key={idx}
                 className={`p-4 border transition-all ${
                   item.highlight
-                    ? "border-craft-dark bg-craft-surface shadow-craft-sm"
-                    : "border-craft-border bg-craft-bg/50 hover:bg-craft-surface/60"
+                    ? "border-bean-espresso bg-bean-crema shadow-craft-sm"
+                    : "border-bean-border bg-bean-parchment hover:bg-bean-crema/60"
                 }`}
               >
                 <div className="flex items-center justify-between mb-2">
                   <span
                     className={`font-mono text-sm font-bold px-2 py-0.5 ${
-                      item.color || "bg-craft-subtle text-craft-dark"
+                      item.color || "bg-bean-subtle text-bean-espresso"
                     }`}
                   >
                     {item.day}
                   </span>
-                  {item.tag && (
-                    <span className="font-mono text-[9px] uppercase tracking-tighter text-craft-accent font-semibold">
-                      {item.tag}
-                    </span>
-                  )}
+                  <CoffeeBeanIcon size={16} roast={item.roast} />
                 </div>
-                <div className="font-heading font-bold text-base text-craft-dark mb-1">
+                <div className="font-heading font-bold text-base text-bean-espresso mb-1">
                   {item.title}
                 </div>
-                <p className="text-xs text-craft-muted leading-relaxed font-body">
+                <p className="text-xs text-bean-muted leading-relaxed font-body">
                   {item.desc}
                 </p>
               </div>
@@ -111,55 +115,55 @@ export function FreshnessCycle() {
           </div>
         </div>
 
-        {/* Honest Comparison Table: Commercial shelf vs Kvarta batch */}
+        {/* Comparison: Supermarket vs Kvarta Fresh Bean */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
-          <div className="border border-craft-border p-6 bg-craft-surface/40">
-            <div className="font-mono text-xs uppercase tracking-wider text-craft-muted mb-3 flex items-center gap-2">
+          <div className="border border-bean-border p-6 bg-bean-crema/40">
+            <div className="font-mono text-xs uppercase tracking-wider text-bean-muted mb-3 flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-stone-400" />
-              <span>Кофе из супермаркета</span>
+              <span>Зерно из супермаркета</span>
             </div>
-            <h3 className="font-heading text-xl font-bold text-craft-dark mb-3">
-              Обжарен 4–9 месяцев назад
+            <h3 className="font-heading text-xl font-bold text-bean-espresso mb-3">
+              Обжарено 4–9 месяцев назад
             </h3>
-            <ul className="space-y-2.5 text-sm text-craft-muted font-body">
+            <ul className="space-y-2.5 text-sm text-bean-muted font-body">
               <li className="flex items-start gap-2">
-                <span className="text-craft-dark font-mono">—</span>
-                <span>Эфирные масла окислились, оставив плоский горький привкус.</span>
+                <span className="text-bean-espresso font-mono">—</span>
+                <span>Эфирные масла в порах зерна окислились, остался лишь горький привкус древесины.</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-craft-dark font-mono">—</span>
-                <span>Усредненная темная обжарка, скрывающая дефекты старого зерна.</span>
+                <span className="text-bean-espresso font-mono">—</span>
+                <span>Маскирующая тёмная обжарка скрывает дефекты дешёвого коммерческого сырья.</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-craft-dark font-mono">—</span>
-                <span>Месяцы на складах дистрибьюторов при перепадах температур.</span>
+                <span className="text-bean-espresso font-mono">—</span>
+                <span>Месяцы на складах при температурных перепадах уничтожают крема и тело напитка.</span>
               </li>
             </ul>
           </div>
 
-          <div className="border-2 border-craft-dark p-6 bg-craft-surface relative shadow-craft">
-            <div className="absolute top-0 right-0 transform translate-x-2 -translate-y-3 bg-craft-accent text-craft-bg font-mono text-[10px] tracking-widest uppercase px-2.5 py-1 font-bold">
-              Стандарт «Кварты»
+          <div className="border-2 border-bean-espresso p-6 bg-bean-crema relative shadow-craft">
+            <div className="absolute top-0 right-0 transform translate-x-2 -translate-y-3 bg-bean-crack text-bean-parchment font-mono text-[10px] tracking-widest uppercase px-2.5 py-1 font-bold">
+              Стандарт свежести «Кварта»
             </div>
-            <div className="font-mono text-xs uppercase tracking-wider text-craft-accent mb-3 flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-craft-accent" />
-              <span>Обжарка «Кварта»</span>
+            <div className="font-mono text-xs uppercase tracking-wider text-bean-crack mb-3 flex items-center gap-2">
+              <CoffeeBeanIcon size={14} roast="crack" />
+              <span>Живое зерно «Кварта»</span>
             </div>
-            <h3 className="font-heading text-xl font-bold text-craft-dark mb-3">
-              1–3 день после обжарочной печи
+            <h3 className="font-heading text-xl font-bold text-bean-espresso mb-3">
+              1–3 день после обжарочного барабана
             </h3>
-            <ul className="space-y-2.5 text-sm text-craft-dark font-body">
+            <ul className="space-y-2.5 text-sm text-bean-espresso font-body">
               <li className="flex items-start gap-2">
-                <span className="text-craft-accent font-bold font-mono">+</span>
-                <span>Живой букет: отчетливые ноты бергамота, красного яблока, ореха.</span>
+                <span className="text-bean-crack font-bold font-mono">+</span>
+                <span>Пик аромата: открытая пачка заполняет всю кухню нотами бергамота, ореха или яблока.</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-craft-accent font-bold font-mono">+</span>
-                <span>Партии строго по 5 кг: обжарщик видит каждое зерно.</span>
+                <span className="text-bean-crack font-bold font-mono">+</span>
+                <span>Партии по 5 кг: обжарщик проверяет цвет и равномерность развития каждого зерна.</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-craft-accent font-bold font-mono">+</span>
-                <span>Прямая доставка в Минске без посредников и складов.</span>
+                <span className="text-bean-crack font-bold font-mono">+</span>
+                <span>Прямая доставка в Минске без посредников и складского простоя.</span>
               </li>
             </ul>
           </div>

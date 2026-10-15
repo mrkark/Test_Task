@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const runtime = "nodejs";
-export const alt = "Обжарка «Кварта» · Свежий кофе в Минске";
+export const alt = "Обжарка «Кварта» · Свежеобжаренное зерно в Минске";
 export const size = {
   width: 1200,
   height: 630,
@@ -19,10 +19,10 @@ export default async function Image() {
           flexDirection: "column",
           justifyContent: "space-between",
           padding: "80px",
-          backgroundColor: "#F6F4EE",
-          color: "#1C1917",
+          backgroundColor: "#F9F6F0",
+          color: "#1A0F0A",
           fontFamily: "sans-serif",
-          border: "16px solid #1C1917",
+          border: "16px solid #1A0F0A",
         }}
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -31,10 +31,13 @@ export default async function Image() {
               fontSize: "36px",
               fontWeight: 900,
               letterSpacing: "-0.05em",
-              color: "#1C1917",
+              color: "#1A0F0A",
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
             }}
           >
-            КВАРТА
+            ● КВАРТА / ОБЖАРКА ЗЕРНА
           </div>
           <div
             style={{
@@ -42,8 +45,8 @@ export default async function Image() {
               fontWeight: 700,
               letterSpacing: "0.1em",
               textTransform: "uppercase",
-              backgroundColor: "#B84A28",
-              color: "#F6F4EE",
+              backgroundColor: "#C45525",
+              color: "#F9F6F0",
               padding: "8px 16px",
             }}
           >
@@ -61,16 +64,16 @@ export default async function Image() {
               maxWidth: "1000px",
             }}
           >
-            Кофе на 1–3 день после обжарки. Прямо у вас дома.
+            Свежеобжаренное зерно на 1–3 день после ростера.
           </div>
           <div
             style={{
               fontSize: "26px",
-              color: "#78716C",
+              color: "#78685C",
               maxWidth: "850px",
             }}
           >
-            Обжариваем партиями по 5 кг по четвергам. Развозим по Минску по пятницам.
+            Жарим по четвергам батчами по 5 кг. Доставка по Минску в пятницу.
           </div>
         </div>
 
@@ -80,12 +83,12 @@ export default async function Image() {
             justifyContent: "space-between",
             fontSize: "20px",
             fontWeight: 600,
-            borderTop: "2px solid #DDD7CD",
+            borderTop: "2px solid #D6C7B2",
             paddingTop: "30px",
-            color: "#1C1917",
+            color: "#1A0F0A",
           }}
         >
-          <div>Эфиопия · Колумбия · Бразилия · Дрипы</div>
+          <div>Эфиопия Иргачеффе · Колумбия Уила · Бразилия Серрадо · Дрипы</div>
           <div>Подписка от 54 BYN / мес</div>
         </div>
       </div>

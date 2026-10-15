@@ -8,17 +8,34 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        // Coffee Bean Color Spectrum (from raw green to rich crema & dark espresso)
+        bean: {
+          parchment: "#F9F6F0", // Warm bean parchment / light paper bg
+          crema: "#F3ECE1",     // Froth / crema surface
+          subtle: "#E7DCcb",    // Soft border & divider
+          border: "#D6C7B2",    // Hairline craft border
+          espresso: "#1A0F0A",  // Deepest dark roast text & elements
+          roast: "#2C1A11",     // Dark rich coffee bean body
+          muted: "#78685C",     // Coffee husk & chaff muted text
+          crack: "#C45525",     // First crack terracotta accent
+          "crack-hover": "#A64218",
+          green: "#5B6C50",     // Raw green specialty coffee bean
+          chaff: "#D9A865",     // Golden roasted silverskin / chaff
+          caramel: "#8C4F2B",   // Maillard reaction warm brown
+          honey: "#B57D3E",     // Honey process / golden bean
+        },
+        // Maintain backwards compatibility with craft tokens mapped to bean palette
         craft: {
-          bg: "#F6F4EE",
-          surface: "#EDE8DF",
-          subtle: "#E5DFD5",
-          border: "#DDD7CD",
-          dark: "#1C1917",
-          muted: "#78716C",
-          accent: "#B84A28", // terracotta / coffee cherry
-          "accent-hover": "#9F3D1F",
-          olive: "#5F634F",
-          sand: "#C4BBAF",
+          bg: "#F9F6F0",
+          surface: "#F3ECE1",
+          subtle: "#E7DCcb",
+          border: "#D6C7B2",
+          dark: "#1A0F0A",
+          muted: "#78685C",
+          accent: "#C45525",
+          "accent-hover": "#A64218",
+          olive: "#5B6C50",
+          sand: "#D9A865",
         },
       },
       fontFamily: {
@@ -30,14 +47,27 @@ module.exports = {
         none: "0",
         sm: "2px",
         DEFAULT: "4px",
+        bean: "12px 4px 14px 4px", // Organic coffee bean asymmetrical radius
       },
       boxShadow: {
-        craft: "2px 2px 0px 0px #1C1917",
-        "craft-sm": "1px 1px 0px 0px #1C1917",
+        craft: "2px 2px 0px 0px #1A0F0A",
+        "craft-sm": "1px 1px 0px 0px #1A0F0A",
+        "bean-glow": "0 0 25px -5px rgba(196, 85, 37, 0.35)",
       },
       letterSpacing: {
         editorial: "-0.03em",
         spacious: "0.15em",
+      },
+      animation: {
+        "pulse-slow": "pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+        "float-gentle": "floatGentle 6s ease-in-out infinite",
+        "spin-slow": "spin 20s linear infinite",
+      },
+      keyframes: {
+        floatGentle: {
+          "0%, 100%": { transform: "translateY(0px) rotate(0deg)" },
+          "50%": { transform: "translateY(-8px) rotate(3deg)" },
+        },
       },
     },
   },

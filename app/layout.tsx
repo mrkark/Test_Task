@@ -21,7 +21,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const viewport: Viewport = {
-  themeColor: "#F6F4EE",
+  themeColor: "#F9F6F0",
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
@@ -105,7 +105,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="bg-craft-bg text-craft-dark min-h-screen selection:bg-craft-accent selection:text-craft-bg antialiased">
+      <body className="bg-bean-parchment text-bean-espresso min-h-screen selection:bg-bean-crack selection:text-bean-parchment antialiased">
         {children}
       </body>
     </html>
