@@ -5,20 +5,18 @@
 */
 export default function Story() {
   return (
-    <section id="story" className="border-b">
-      <div className="mx-auto grid max-w-[1240px] gap-8 px-5 py-16 md:grid-cols-12 md:gap-x-8 md:py-24">
-        <p className="eyebrow md:col-span-3">01 — Кто мы</p>
+    <section id="story" className="grain bg-straw text-ink">
+      <div className="mx-auto grid max-w-[1240px] gap-10 px-5 py-16 md:grid-cols-12 md:gap-x-12 md:py-24">
+        <h2 className="h-stamp text-[clamp(2.2rem,5vw,4rem)] md:col-span-5">
+          Раньше мы стояли за баром. Теперь стоим у ростера
+        </h2>
 
-        <div className="md:col-span-8 md:col-start-5">
-          <h2 className="max-w-[22ch] text-balance font-display text-[clamp(1.9rem,4.6vw,3.4rem)] font-medium leading-[1.05] tracking-tight">
-            Мы — Аня и Дмитрий. Раньше стояли за баром, теперь стоим у ростера.
-          </h2>
-
-          <div className="mt-9 grid gap-6 text-[1.0625rem] md:grid-cols-2 md:gap-x-10">
+        <div className="md:col-span-7">
+          <div className="grid gap-6 text-[1.0625rem] md:grid-cols-2 md:gap-x-10">
             <p>
-              Мы оба работали бариста. Варили кофе, разговаривали с людьми у стойки и всё чаще
-              ловили себя на мысли: хорошее зерно можно испортить просто тем, что оно долго лежит и
-              ждёт покупателя.
+              Мы — Аня и Дмитрий, и мы оба работали бариста. Варили кофе, разговаривали с людьми у
+              стойки и всё чаще ловили себя на мысли: хорошее зерно можно испортить просто тем, что
+              оно долго лежит и ждёт покупателя.
             </p>
             <p>
               В 2019 году мы ушли из кофеен и купили ростер на 5 килограммов. Это очень мало, и это
@@ -26,7 +24,7 @@ export default function Story() {
             </p>
             <p>
               Поэтому у нас простой порядок. В четверг жарим, в пятницу развозим по Минску. К вам
-              зерно приезжает на 1–3 день после обжарки, а не через месяц после того, как его
+              зерно приезжает на <span className="whitespace-nowrap">1–3 день</span> после обжарки, а не через месяц после того, как его
               поставили на полку.
             </p>
             <p>
@@ -35,13 +33,12 @@ export default function Story() {
             </p>
           </div>
 
-          <blockquote className="mt-14 border-l-2 border-accent pl-6 md:pl-8">
-            <p className="max-w-[24ch] text-balance font-display text-[clamp(1.6rem,3.6vw,2.6rem)] font-medium italic leading-[1.1] tracking-tight">
+          {/* Пометка как штамп на мешке: двойная рамка, лёгкий наклон. */}
+          <blockquote className="stamp mt-14 -rotate-1 px-6 py-7 text-stamp md:px-9 md:py-9">
+            <p className="font-display text-[clamp(1.7rem,3.8vw,2.8rem)] font-semibold uppercase leading-[1.05] tracking-[0.01em] text-balance">
               Мы не жарим про запас. Кофе должен жить, а не лежать на полках.
             </p>
-            <footer className="mt-5 font-mono text-xs uppercase tracking-[0.08em] text-muted">
-              Аня и Дмитрий · Минск, ул. Короля, 9
-            </footer>
+            <footer className="mt-4 text-base text-ink-soft">Аня и Дмитрий</footer>
           </blockquote>
         </div>
       </div>

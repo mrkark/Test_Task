@@ -1,43 +1,49 @@
 @import "tailwindcss";
 
 /*
-  Дизайн-система «Кварта».
-  Правила: без градиентов, без размытых теней, без скруглений больше 4px,
-  без иконок из паков. Разделение — линиями 1px и жёсткой тенью 2px без blur.
+  Дизайн-система «Кварта», версия 2: «Обжарка».
+  Страница прожаривается по мере прокрутки: секции — плоские поля цвета реальных стадий зерна
+  (зелёное → соломенное → светлая обжарка → средняя → тёмная). Градиентов, размытых теней и
+  больших скруглений нет: переходы между стадиями — ступени, как на кривой обжарки.
+  Все пары «текст на поле» проверены на контраст ≥ 4.5:1.
 */
 
+/* Регистрируем цвет зерна как типизированное свойство: так браузер плавно меняет его в анимации. */
+@property --bean {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #74854b;
+}
+
 @theme {
-  --color-paper: #f6f4ee; /* неотбеленная бумага */
-  --color-surface: #ede8df; /* песочная плашка */
-  --color-ink: #1c1917; /* кофейный графит */
-  /* ДОПУЩЕНИЕ: в промпте #78716C даёт контраст ~4.4:1 на фоне — ниже AA (4.5) для мелкого текста.
-     Чуть темнее, чтобы пройти проверку доступности. */
-  --color-muted: #6a635e;
-  --color-accent: #b84a28; /* обожжённая терракота */
-  /* Терракота на песочной плашке даёт 4.25:1, ниже AA. Для мелкого текста (ошибки формы) — темнее, 4.94:1. */
-  --color-accent-deep: #a9421f;
-  --color-olive: #5f634f; /* сухой шалфей */
-  --color-line: #ddd7cd; /* волосяная линия */
+  --color-leaf: #3d4c26; /* зелёное зерно, поле героя */
+  --color-straw: #d6c583; /* сушка: зерно желтеет */
+  --color-cinnamon: #c9a06a; /* светлая обжарка */
+  --color-city: #6b3f25; /* средняя обжарка */
+  --color-roast: #2a1810; /* тёмная обжарка */
+  --color-char: #1a0e08; /* самое тёмное: низ страницы */
+  --color-chaff: #f3ebd3; /* шелуха: светлый текст на тёмном */
+  --color-chaff-soft: #e4d9b8;
+  --color-amber: #f0b766; /* карамель: акцент на тёмном */
+  --color-stamp: #8e241c; /* штемпельная краска, для текста только на светлых полях */
+  --color-flag: #e0604f; /* ошибки на тёмном */
+  --color-ink: #241309; /* текст на светлых полях */
+  --color-ink-soft: #3a2616;
 
   --radius-sm: 2px;
 }
 
 @theme inline {
-  --font-display: var(--f-display), Georgia, "Times New Roman", serif;
-  --font-sans: var(--f-sans), system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-mono: var(--f-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
+  /* Oswald — плотный узкий шрифт, как трафаретная печать на мешках с зелёным кофе. */
+  --font-display: var(--f-display), "Arial Narrow", "Roboto Condensed", sans-serif;
+  --font-text: var(--f-text), Georgia, "Times New Roman", serif;
 }
 
 @layer base {
-  *,
-  ::before,
-  ::after {
-    border-color: var(--color-line);
-  }
-
   html {
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
+    background-color: var(--color-char);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -47,24 +53,22 @@
   }
 
   body {
-    background-color: var(--color-paper);
-    /* тактильный шум: плитка 180px из SVG feTurbulence, ~7% непрозрачности, без градиентов */
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .11 0 0 0 0 .1 0 0 0 0 .09 0 0 0 .14 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    background-size: 180px 180px;
-    color: var(--color-ink);
-    font-family: var(--font-sans);
+    background-color: var(--color-char);
+    color: var(--color-chaff);
+    font-family: var(--font-text);
     font-size: 1.0625rem;
-    line-height: 1.55;
+    line-height: 1.65; /* у антиквы интерлиньяж чуть больше, чем у гротеска */
     -webkit-font-smoothing: antialiased;
   }
 
   ::selection {
-    background: var(--color-accent);
-    color: var(--color-paper);
+    background: var(--color-amber);
+    color: var(--color-ink);
   }
 
+  /* Контур берёт цвет текста секции, поэтому виден и на светлом, и на тёмном поле. */
   :focus-visible {
-    outline: 2px solid var(--color-accent);
+    outline: 3px solid currentColor;
     outline-offset: 3px;
   }
 
@@ -74,33 +78,60 @@
 }
 
 @layer components {
-  /* мелкая моно-подпись: «спецификация» */
-  .eyebrow {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    letter-spacing: 0.08em;
+  /* Зерно бумаги/мешковины: плитка 180px из SVG-шума. Тёмные крапинки — для светлых полей. */
+  .grain {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .11 0 0 0 0 .07 0 0 0 0 .04 0 0 0 .16 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 180px 180px;
+  }
+  /* Светлые крапинки — для тёмных полей. */
+  .grain-light {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .95 0 0 0 0 .9 0 0 0 0 .78 0 0 0 .1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 180px 180px;
+  }
+
+  /* Заголовок как трафаретная печать: Oswald, прописные, плотный интерлиньяж. */
+  .h-stamp {
+    font-family: var(--font-display);
+    font-weight: 600;
     text-transform: uppercase;
-    color: var(--color-muted);
+    letter-spacing: 0.01em;
+    line-height: 0.98;
+    text-wrap: balance;
+  }
+
+  /* Штамп на мешке: двойная рамка цветом текста. */
+  .stamp {
+    border: 2px solid currentColor;
+    outline: 1px solid currentColor;
+    outline-offset: 3px;
   }
 
   .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.6rem;
     min-height: 3.25rem;
-    padding: 0 1.5rem;
-    border: 1px solid var(--color-ink);
+    padding: 0 1.6rem;
+    border: 2px solid var(--btn-line, currentColor);
     border-radius: 2px;
-    font-size: 1rem;
+    background: var(--btn-bg, transparent);
+    color: var(--btn-fg, inherit);
+    font-family: var(--font-display);
+    font-size: 1.05rem;
     font-weight: 600;
+    letter-spacing: 0.06em;
     line-height: 1;
+    text-transform: uppercase;
     text-decoration: none;
     cursor: pointer;
     transition:
       background-color 0.15s,
       color 0.15s,
-      border-color 0.15s;
+      transform 0.1s;
+  }
+  .btn:hover:not(:disabled) {
+    background: var(--btn-hover-bg);
+    color: var(--btn-hover-fg);
   }
   .btn:active:not(:disabled) {
     transform: translate(1px, 1px);
@@ -109,56 +140,254 @@
     opacity: 0.6;
     cursor: not-allowed;
   }
+  .btn-ink {
+    --btn-bg: var(--color-ink);
+    --btn-fg: var(--color-chaff);
+    --btn-line: var(--color-ink);
+    --btn-hover-bg: transparent;
+    --btn-hover-fg: var(--color-ink);
+  }
+  .btn-amber {
+    --btn-bg: var(--color-amber);
+    --btn-fg: var(--color-ink);
+    --btn-line: var(--color-amber);
+    --btn-hover-bg: transparent;
+    --btn-hover-fg: var(--color-amber);
+  }
+  .btn-outline-chaff {
+    --btn-bg: transparent;
+    --btn-fg: var(--color-chaff);
+    --btn-line: var(--color-chaff);
+    --btn-hover-bg: var(--color-chaff);
+    --btn-hover-fg: var(--color-ink);
+  }
+  .btn-outline-ink {
+    --btn-bg: transparent;
+    --btn-fg: var(--color-ink);
+    --btn-line: var(--color-ink);
+    --btn-hover-bg: var(--color-ink);
+    --btn-hover-fg: var(--color-chaff);
+  }
 
-  .btn-solid {
-    background: var(--color-ink);
-    color: var(--color-paper);
-  }
-  .btn-solid:hover:not(:disabled) {
-    background: var(--color-accent);
-    border-color: var(--color-accent);
-  }
-
-  .btn-line {
-    background: transparent;
-    color: var(--color-ink);
-  }
-  .btn-line:hover:not(:disabled) {
-    background: var(--color-ink);
-    color: var(--color-paper);
-  }
-
-  /* поля формы: только нижняя линия, фокус — терракота */
+  /* Поля формы (форма стоит на тёмном поле): только нижняя линия, фокус — карамель. */
   .field {
     display: block;
     width: 100%;
     margin-top: 0.25rem;
-    padding: 0.75rem 0;
+    padding: 0.7rem 0;
     background: transparent;
     border: 0;
-    border-bottom: 1px solid var(--color-ink);
+    border-bottom: 2px solid var(--color-chaff-soft);
     border-radius: 0;
+    color: var(--color-chaff);
     font: inherit;
-    font-size: 1.125rem; /* не меньше 16px, чтобы iOS не зумил при фокусе */
-    color: var(--color-ink);
+    font-size: 1.25rem; /* не меньше 16px, чтобы iOS не зумил при фокусе */
     appearance: none;
-    transition:
-      border-color 0.15s,
-      box-shadow 0.15s;
+    transition: border-color 0.15s;
   }
   .field::placeholder {
-    color: var(--color-muted);
+    color: var(--color-chaff-soft);
+    opacity: 0.7;
   }
   .field:focus {
     outline: none;
-    border-bottom-color: var(--color-accent);
-    box-shadow: 0 1px 0 0 var(--color-accent);
+    border-bottom-color: var(--color-amber);
+    box-shadow: 0 2px 0 0 var(--color-amber);
   }
   .field[aria-invalid="true"] {
-    border-bottom-color: var(--color-accent);
+    border-bottom-color: var(--color-flag);
   }
   textarea.field {
     resize: vertical;
     min-height: 5rem;
+  }
+
+  /* --- Зерно: плоские формы, цвет задаёт --bean (на корне SVG). --- */
+  .bean-body {
+    fill: var(--bean);
+  }
+  .bean-shade {
+    fill: color-mix(in srgb, var(--bean) 78%, #000);
+  }
+  .bean-hi {
+    fill: color-mix(in srgb, var(--bean) 65%, #fff);
+    opacity: 0.45;
+  }
+  .bean-crease {
+    stroke: color-mix(in srgb, var(--bean) 38%, #000);
+    stroke-width: 8;
+  }
+}
+
+/*
+  ГЛАВНЫЙ МОМЕНТ СТРАНИЦЫ: зерно проходит весь путь обжарки за 14 секунд.
+  Пять стадий по 20% цикла. Первый треск — на 48% (светлая обжарка), второй — на 84%.
+  Остальная страница анимаций не имеет: тратим выразительность в одном месте.
+*/
+@keyframes roast-color {
+  0%,
+  10% {
+    --bean: #74854b; /* зелёное */
+  }
+  30% {
+    --bean: #d3bd68; /* жёлтое, сушка */
+  }
+  50% {
+    --bean: #b9854a; /* светлая */
+  }
+  70% {
+    --bean: #7a4727; /* средняя */
+  }
+  90%,
+  96% {
+    --bean: #34190f; /* тёмная */
+  }
+  100% {
+    --bean: #74854b; /* новая партия */
+  }
+}
+
+@keyframes roast-swell {
+  0% {
+    transform: scale(0.86);
+  }
+  44% {
+    transform: scale(0.98);
+  }
+  48% {
+    transform: scale(1.08); /* первый треск */
+  }
+  52% {
+    transform: scale(1.02);
+  }
+  80% {
+    transform: scale(1.05);
+  }
+  84% {
+    transform: scale(1.1); /* второй треск */
+  }
+  88% {
+    transform: scale(1.06);
+  }
+  96% {
+    transform: scale(1.07);
+  }
+  100% {
+    transform: scale(0.86);
+  }
+}
+
+@keyframes roast-crease {
+  0%,
+  44% {
+    stroke-width: 5;
+  }
+  52% {
+    stroke-width: 12;
+  }
+  100% {
+    stroke-width: 15;
+  }
+}
+
+/* Шелуха отлетает на первом треске. */
+@keyframes chaff-fly {
+  0%,
+  47% {
+    opacity: 0;
+    transform: translate(0, 0) rotate(0deg);
+  }
+  49% {
+    opacity: 1;
+  }
+  64%,
+  100% {
+    opacity: 0;
+    transform: translate(var(--dx), var(--dy)) rotate(var(--r));
+  }
+}
+
+/* Подпись текущей стадии: каждая горит своё окно в 20% цикла. */
+@keyframes stage-on {
+  0%,
+  18% {
+    opacity: 1;
+    border-left-color: var(--color-amber);
+  }
+  20%,
+  100% {
+    opacity: 0.75;
+    border-left-color: transparent;
+  }
+}
+
+.roast-svg {
+  animation: roast-color 14s linear infinite;
+}
+.roast-swell {
+  transform-origin: 200px 200px;
+  animation: roast-swell 14s ease-in-out infinite;
+}
+.roast-svg .bean-crease {
+  animation: roast-crease 14s linear infinite;
+}
+.chaff {
+  fill: var(--color-chaff-soft);
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: chaff-fly 14s ease-out infinite;
+}
+.stage {
+  opacity: 0.75;
+  border-left: 4px solid transparent;
+  animation: stage-on 14s linear infinite;
+  animation-delay: calc(var(--i) * 2.8s);
+}
+
+/* Печать «Принято» стукается о форму, когда заявка ушла: движение отвечает на действие. */
+@keyframes stamp-down {
+  0% {
+    opacity: 0;
+    transform: scale(1.7) rotate(-9deg);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(0.96) rotate(-4deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(-4deg);
+  }
+}
+.stamp-down {
+  animation: stamp-down 0.35s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .roast-svg {
+    --bean: #7a4727;
+    animation: none;
+  }
+  .roast-swell,
+  .roast-svg .bean-crease,
+  .stage,
+  .stamp-down {
+    animation: none;
+  }
+  .roast-swell {
+    transform: scale(1);
+  }
+  .roast-svg .bean-crease {
+    stroke-width: 12;
+  }
+  .stage {
+    opacity: 1;
+  }
+  .stamp-down {
+    transform: rotate(-4deg);
+  }
+  .chaff {
+    display: none;
   }
 }

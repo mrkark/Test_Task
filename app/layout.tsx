@@ -1,29 +1,24 @@
 import type { Metadata, Viewport } from "next";
-import { Alegreya, JetBrains_Mono, Manrope } from "next/font/google";
+import { Literata, Oswald } from "next/font/google";
 import AttributionCapture from "@/components/AttributionCapture";
 import "./globals.css";
 
 /*
-  ДОПУЩЕНИЕ: в промпте для заголовков предложен Fraunces, но на Google Fonts у него нет
-  кириллицы — русские буквы упали бы в системный fallback. Берём Alegreya: тёплая
-  «книжная» антиква с настоящим курсивом и полной кириллицей.
+  Oswald — плотный узкий гротеск, похожий на трафаретную печать на мешках с зелёным кофе
+  (страна, регион, сорт). Им набраны заголовки и цифры.
+  Literata — тёплая текстовая антиква для всего остального.
+  Оба шрифта с кириллицей, оба вариативные: два файла вместо четырёх.
 */
-const display = Alegreya({
+const display = Oswald({
   subsets: ["cyrillic", "latin"],
-  style: ["normal", "italic"],
   variable: "--f-display",
   display: "swap",
 });
 
-const sans = Manrope({
+const text = Literata({
   subsets: ["cyrillic", "latin"],
-  variable: "--f-sans",
-  display: "swap",
-});
-
-const mono = JetBrains_Mono({
-  subsets: ["cyrillic", "latin"],
-  variable: "--f-mono",
+  style: ["normal", "italic"],
+  variable: "--f-text",
   display: "swap",
 });
 
@@ -71,12 +66,12 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#f6f4ee",
+  themeColor: "#3d4c26",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ru" className={`${display.variable} ${sans.variable} ${mono.variable}`}>
+    <html lang="ru" className={`${display.variable} ${text.variable}`}>
       <body>
         <AttributionCapture />
         {children}

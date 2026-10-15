@@ -26,7 +26,7 @@ const STEPS: { days: string; title: string; text: string }[] = [
   },
 ];
 
-/** «Ритм недели»: четыре этапа, текущий день по Минску подсвечивается после гидрации. */
+/** «Ритм недели»: четыре этапа по порядку (это настоящая последовательность, поэтому нумерация уместна). */
 export default function WeekTimeline() {
   const [today, setToday] = useState<WeekStep | null>(null);
 
@@ -42,20 +42,20 @@ export default function WeekTimeline() {
           <li
             key={step.days}
             aria-current={active ? "step" : undefined}
-            className={`relative border-t-2 pb-8 pt-4 md:pb-0 ${active ? "border-accent" : "border-ink"}`}
+            className={`border-t-4 pb-8 pt-4 md:pb-0 ${active ? "border-amber" : "border-chaff-soft/50"}`}
           >
-            <p className="flex items-center gap-3 font-mono text-sm">
-              <span className="font-medium">{step.days}</span>
+            <p className="flex items-center gap-3 font-display text-xl font-medium">
+              <span>
+                {i + 1}. {step.days}
+              </span>
               {active && (
-                <span className="bg-accent px-1.5 py-0.5 text-[10px] uppercase tracking-[0.08em] text-paper">
+                <span className="bg-amber px-2 py-0.5 text-sm font-semibold uppercase tracking-[0.06em] text-ink">
                   сегодня
                 </span>
               )}
             </p>
-            <h3 className="mt-3 font-display text-2xl font-medium leading-tight tracking-tight">
-              {step.title}
-            </h3>
-            <p className="mt-2 text-[0.95rem] leading-snug text-muted">{step.text}</p>
+            <h3 className="h-stamp mt-3 text-[1.7rem]">{step.title}</h3>
+            <p className="mt-2 text-[0.95rem] leading-snug text-chaff-soft">{step.text}</p>
           </li>
         );
       })}

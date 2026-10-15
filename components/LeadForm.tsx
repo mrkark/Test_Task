@@ -4,7 +4,6 @@ import { type ChangeEvent, type FormEvent, useEffect, useRef, useState } from "r
 import { INTERESTS, INTEREST_EVENT, type InterestId } from "@/lib/catalog";
 import { formatPhone, nationalDigits, validatePhone } from "@/lib/phone";
 import { getAttribution } from "@/lib/utm";
-import Arrow from "./Arrow";
 
 type Status = "idle" | "loading" | "success" | "error";
 type Field = "name" | "phone" | "interest";
@@ -140,18 +139,24 @@ export default function LeadForm() {
         ref={successRef}
         tabIndex={-1}
         role="status"
-        className="border border-ink bg-surface p-6 shadow-[2px_2px_0_0_var(--color-ink)] outline-none md:p-8"
+        className="relative border-2 border-ink bg-chaff p-6 text-ink shadow-[4px_4px_0_0_var(--color-amber)] outline-none md:p-8"
       >
-        <p className="eyebrow">{success.duplicate ? "Заявка уже у нас" : "Заявка принята"}</p>
-        <h3 className="mt-3 font-display text-3xl font-medium leading-tight tracking-tight md:text-4xl">
+        <span
+          className="stamp stamp-down absolute right-5 top-5 bg-chaff px-3 py-1 font-display text-lg font-semibold uppercase tracking-[0.08em] text-stamp"
+          aria-hidden="true"
+        >
+          {success.duplicate ? "Уже у нас" : "Принято"}
+        </span>
+        <h3 className="h-stamp max-w-[12ch] pr-28 text-[clamp(2rem,4vw,2.8rem)]">
           Спасибо, {success.name}!
         </h3>
-        <p className="mt-4 text-[1.0625rem]">{success.message}</p>
-        <p className="mt-2 text-muted">
-          Менеджер перезвонит на <span className="font-mono text-ink">{success.phone}</span> в
-          рабочее время: пн–пт 8:00–20:00, сб–вс 10:00–18:00.
+        <p className="mt-5 text-[1.0625rem]">{success.message}</p>
+        <p className="mt-2 text-ink-soft">
+          Ждите звонок на{" "}
+          <span className="font-display text-lg tracking-[0.03em] text-ink">{success.phone}</span>. Мы
+          на связи пн–пт 8:00–20:00, сб–вс 10:00–18:00.
         </p>
-        <button type="button" className="btn btn-line mt-7" onClick={() => setStatus("idle")}>
+        <button type="button" className="btn btn-outline-ink mt-7" onClick={() => setStatus("idle")}>
           Оставить ещё одну заявку
         </button>
       </div>
@@ -163,7 +168,7 @@ export default function LeadForm() {
   return (
     <form onSubmit={onSubmit} noValidate className="relative grid gap-8" aria-busy={loading}>
       <label className="block">
-        <span className="eyebrow">Имя</span>
+        <span className="text-lg font-medium">Имя</span>
         <input
           ref={nameRef}
           className="field"
@@ -181,17 +186,17 @@ export default function LeadForm() {
           placeholder="Как к вам обращаться"
         />
         {errors.name && (
-          <p id="err-name" role="alert" className="mt-2 text-sm text-accent-deep">
+          <p id="err-name" role="alert" className="mt-2 text-base text-flag">
             {errors.name}
           </p>
         )}
       </label>
 
       <label className="block">
-        <span className="eyebrow">Телефон</span>
+        <span className="text-lg font-medium">Телефон</span>
         <input
           ref={phoneRef}
-          className="field font-mono"
+          className="field font-display tracking-[0.04em]"
           name="phone"
           type="tel"
           inputMode="tel"
@@ -208,18 +213,18 @@ export default function LeadForm() {
           placeholder="+375 (29) 123-45-67"
         />
         {errors.phone ? (
-          <p id="err-phone" role="alert" className="mt-2 text-sm text-accent-deep">
+          <p id="err-phone" role="alert" className="mt-2 text-base text-flag">
             {errors.phone}
           </p>
         ) : (
-          <p id="hint-phone" className="mt-2 text-sm text-muted">
+          <p id="hint-phone" className="mt-2 text-sm text-chaff-soft">
             Мобильный: 25, 29, 33 или 44.
           </p>
         )}
       </label>
 
       <fieldset>
-        <legend className="eyebrow">Что интересует</legend>
+        <legend className="text-lg font-medium">Что интересует</legend>
         <div className="mt-3 flex flex-wrap gap-2">
           {INTERESTS.map((item) => (
             <label key={item.id} className="cursor-pointer">
@@ -234,21 +239,21 @@ export default function LeadForm() {
                 }}
                 className="peer sr-only"
               />
-              <span className="inline-flex min-h-11 items-center rounded-sm border border-ink px-4 text-[0.95rem] font-medium transition-colors hover:bg-surface peer-checked:bg-ink peer-checked:text-paper peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-accent">
+              <span className="inline-flex min-h-11 items-center rounded-sm border-2 border-chaff-soft px-4 font-display text-lg font-medium uppercase tracking-[0.04em] transition-colors hover:bg-chaff/15 peer-checked:border-amber peer-checked:bg-amber peer-checked:text-ink peer-focus-visible:outline-3 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-chaff">
                 {item.label}
               </span>
             </label>
           ))}
         </div>
         {errors.interest && (
-          <p role="alert" className="mt-3 text-sm text-accent-deep">
+          <p role="alert" className="mt-3 text-base text-flag">
             {errors.interest}
           </p>
         )}
       </fieldset>
 
       <label className="block">
-        <span className="eyebrow">Комментарий</span>
+        <span className="text-lg font-medium">Комментарий</span>
         <textarea
           className="field"
           name="comment"
@@ -277,21 +282,14 @@ export default function LeadForm() {
 
       <div>
         {status === "error" && (
-          <p role="alert" className="mb-4 border-l-2 border-accent pl-4 text-[0.95rem]">
+          <p role="alert" className="mb-4 border-l-4 border-flag pl-4">
             {serverError}
           </p>
         )}
-        <button type="submit" className="btn btn-solid w-full md:w-auto md:min-w-[18rem]" disabled={loading}>
-          {loading ? (
-            "Отправляем…"
-          ) : (
-            <>
-              {status === "error" ? "Отправить ещё раз" : "Отправить заявку"}
-              <Arrow />
-            </>
-          )}
+        <button type="submit" className="btn btn-amber w-full md:w-auto md:min-w-[18rem]" disabled={loading}>
+          {loading ? "Отправляем…" : status === "error" ? "Отправить ещё раз" : "Отправить заявку"}
         </button>
-        <p className="mt-4 max-w-[44ch] text-sm text-muted">
+        <p className="mt-4 max-w-[44ch] text-sm text-chaff-soft">
           Номер нужен только чтобы перезвонить по заявке. Оплачивать на сайте ничего не нужно.
         </p>
       </div>

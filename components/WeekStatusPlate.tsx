@@ -4,8 +4,9 @@ import { useEffect, useState } from "react";
 import { getWeekStatus, type WeekStatus } from "@/lib/week";
 
 /**
- * Плашка «статус недели». Даты считаются в браузере после гидрации, чтобы статичный HTML
- * не устаревал в кэше. До этого показываем нейтральный текст той же высоты — без прыжков вёрстки.
+ * Бирка с датами следующей партии, как бумажная бирка на мешке. Даты считаются в браузере
+ * после гидрации, чтобы статичный HTML не устаревал в кэше. До этого показываем нейтральный
+ * текст той же высоты, без прыжков вёрстки.
  */
 export default function WeekStatusPlate() {
   const [s, setS] = useState<WeekStatus | null>(null);
@@ -21,17 +22,17 @@ export default function WeekStatusPlate() {
   ];
 
   return (
-    <div className="border border-ink bg-surface p-5 shadow-[2px_2px_0_0_var(--color-ink)]">
-      <p className="eyebrow">Следующая партия</p>
-      <dl className="mt-4 grid grid-cols-[auto_1fr] gap-x-6 gap-y-2 font-mono text-sm">
+    <div className="max-w-[34rem] border-2 border-ink bg-chaff p-5 text-ink shadow-[4px_4px_0_0_var(--color-amber)] md:p-6">
+      <p className="font-display text-xl font-semibold uppercase tracking-[0.04em]">Следующая партия</p>
+      <dl className="mt-4 grid grid-cols-[auto_1fr] gap-x-6 gap-y-1.5">
         {rows.map(([label, value]) => (
           <div key={label} className="contents">
-            <dt className="text-muted">{label}</dt>
-            <dd className="font-medium">{value}</dd>
+            <dt className="text-ink-soft">{label}</dt>
+            <dd className="font-display text-lg font-medium tracking-[0.02em]">{value}</dd>
           </div>
         ))}
       </dl>
-      <p className="mt-4 min-h-[3.1rem] border-t pt-3 text-[0.95rem] leading-snug">
+      <p className="mt-4 min-h-[3.4rem] border-t-2 border-ink pt-3 leading-snug">
         {s?.note ?? "Принимаем заявки с понедельника по среду, жарим в четверг, развозим в пятницу."}
       </p>
     </div>
