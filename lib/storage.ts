@@ -10,7 +10,7 @@ import type { Lead } from "./types";
  *  1. Upstash Redis по REST (есть UPSTASH_REDIS_REST_URL / KV_REST_API_URL): основной режим на Vercel.
  *     Дедупликация атомарна: `SET dedup:<телефон> NX EX 600` либо ставит ключ, либо говорит «уже есть».
  *     Даже два одновременных запроса на разных инстансах не создадут две заявки.
- *  2. Файл JSONL (без Redis): для локальной разработки. На Vercel файловая система эфемерна
+ *  2. Файл JSON (без Redis): для локальной разработки. На Vercel файловая система эфемерна
  *     (/tmp живёт до остановки инстанса), поэтому там это режим «лишь бы не потерять при проверке».
  */
 
@@ -62,11 +62,36 @@ async function saveToRedis(cfg: { url: string; token: string }, lead: Lead): Pro
 
 /** телефон → время последней заявки (мс). Живёт в памяти инстанса и закрывает двойной клик. */
 const recent = new Map<string, number>();
+let fileLock = Promise.resolve();
 
 export function leadsFile(): string {
   if (process.env.LEADS_FILE) return process.env.LEADS_FILE;
   const dir = process.env.VERCEL ? os.tmpdir() : path.join(process.cwd(), ".data");
-  return path.join(dir, "leads.jsonl");
+  return path.join(dir, "leads.json");
+}
+
+function parseStoredLeads(text: string): Lead[] {
+  const trimmed = text.trim();
+  if (!trimmed) return [];
+  if (trimmed.startsWith("[")) {
+    try {
+      const arr = JSON.parse(trimmed);
+      if (Array.isArray(arr)) return arr as Lead[];
+    } catch {
+      /* битый json */
+    }
+  }
+  // Обратная совместимость с построчным форматом
+  const out: Lead[] = [];
+  for (const line of trimmed.split("\n")) {
+    if (!line) continue;
+    try {
+      out.push(JSON.parse(line) as Lead);
+    } catch {
+      /* битую строку пропускаем */
+    }
+  }
+  return out;
 }
 
 async function saveToFile(lead: Lead): Promise<SaveResult> {
@@ -81,30 +106,33 @@ async function saveToFile(lead: Lead): Promise<SaveResult> {
   if (recent.has(lead.phone)) return "duplicate";
   recent.set(lead.phone, now);
 
-  try {
-    const file = leadsFile();
-    await fs.mkdir(path.dirname(file), { recursive: true });
+  const performWrite = async (): Promise<SaveResult> => {
+    try {
+      const file = leadsFile();
+      await fs.mkdir(path.dirname(file), { recursive: true });
 
-    // Переживаем перезапуск сервера: смотрим на хвост файла.
-    const text = await fs.readFile(file, "utf8").catch(() => "");
-    for (const line of text.split("\n").slice(-200)) {
-      if (!line) continue;
-      try {
-        const saved = JSON.parse(line) as Lead;
+      // Переживаем перезапуск сервера: смотрим на сохранённые заявки
+      const text = await fs.readFile(file, "utf8").catch(() => "");
+      const leads = parseStoredLeads(text);
+
+      for (const saved of leads.slice(-200)) {
         if (saved.phone === lead.phone && now - Date.parse(saved.createdAt) < windowMs) {
           return "duplicate";
         }
-      } catch {
-        /* битую строку пропускаем */
       }
-    }
 
-    await fs.appendFile(file, JSON.stringify(lead) + "\n", "utf8");
-    return "created";
-  } catch (err) {
-    recent.delete(lead.phone);
-    throw err;
-  }
+      leads.push(lead);
+      await fs.writeFile(file, JSON.stringify(leads, null, 2) + "\n", "utf8");
+      return "created";
+    } catch (err) {
+      recent.delete(lead.phone);
+      throw err;
+    }
+  };
+
+  const next = fileLock.then(performWrite, performWrite);
+  fileLock = next.then(() => {}, () => {});
+  return next;
 }
 
 export async function saveLead(lead: Lead): Promise<SaveResult> {
@@ -125,18 +153,21 @@ export async function saveLead(lead: Lead): Promise<SaveResult> {
  */
 export async function listLeads(): Promise<Lead[]> {
   const cfg = redisConfig();
-  const lines: string[] = cfg
-    ? await redis<string[]>(cfg, ["LRANGE", LEADS_KEY, 0, 4999])
-    : (await fs.readFile(leadsFile(), "utf8").catch(() => "")).split("\n").reverse();
-
-  const out: Lead[] = [];
-  for (const line of lines) {
-    if (!line) continue;
-    try {
-      out.push(JSON.parse(line) as Lead);
-    } catch {
-      /* битую строку пропускаем */
+  if (cfg) {
+    const lines = await redis<string[]>(cfg, ["LRANGE", LEADS_KEY, 0, 4999]);
+    const out: Lead[] = [];
+    for (const line of lines) {
+      if (!line) continue;
+      try {
+        out.push(JSON.parse(line) as Lead);
+      } catch {
+        /* битую строку пропускаем */
+      }
     }
+    return out;
   }
-  return out;
+
+  const text = await fs.readFile(leadsFile(), "utf8").catch(() => "");
+  const leads = parseStoredLeads(text);
+  return leads.reverse();
 }

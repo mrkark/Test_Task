@@ -6,7 +6,7 @@ import { test } from "node:test";
 import { formatLead } from "../lib/telegram.ts";
 
 const dir = await mkdtemp(path.join(os.tmpdir(), "kvarta-"));
-process.env.LEADS_FILE = path.join(dir, "leads.jsonl");
+process.env.LEADS_FILE = path.join(dir, "leads.json");
 delete process.env.UPSTASH_REDIS_REST_URL;
 delete process.env.KV_REST_API_URL;
 
